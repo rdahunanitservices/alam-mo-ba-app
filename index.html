@@ -183,6 +183,18 @@ body{
   font-family:'Fredoka',sans-serif;font-size:16px;color:var(--text-dark);
   text-align:center;line-height:1.4;padding:0 10px;
 }
+.result-submsg{
+  font-size:13px;color:var(--text-mid);text-align:center;line-height:1.5;margin-top:-6px
+}
+.best-badge{
+  background:linear-gradient(135deg,var(--gold),#ffe88e);
+  color:var(--blue-dark);
+  font-weight:800;
+  font-size:13px;
+  padding:8px 14px;
+  border-radius:999px;
+  box-shadow:0 4px 12px rgba(252,209,22,0.35);
+}
 .result-actions{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:8px}
 .result-actions .btn-play{width:100%}
 .result-actions .btn-secondary{width:100%;text-align:center}
@@ -555,19 +567,37 @@ function updateTimer() {
 // ===== RESULTS =====
 function endQuiz() {
   clearInterval(timer);
-  if(!bestScores[currentCat] || score > bestScores[currentCat]) {
+
+  const previousBest = bestScores[currentCat] || 0;
+  const isNewBest = !bestScores[currentCat] || score > bestScores[currentCat];
+
+  if(isNewBest) {
     bestScores[currentCat] = score;
     saveBest();
   }
 
   const stars = correctCount >= 9 ? 3 : correctCount >= 7 ? 2 : correctCount >= 4 ? 1 : 0;
   const pct = Math.round((correctCount / currentQs.length) * 100);
+
   let msg = '';
-  if(pct === 100) msg = 'PERFECT! Ang galing mo naman! 🎉🇵🇭';
-  else if(pct >= 80) msg = 'Magaling! Tunay kang Pinoy! 🌟';
-  else if(pct >= 60) msg = 'Hindi naman masama! Konting aral pa! 📚';
-  else if(pct >= 40) msg = 'Kaya mo pa yan! Try ulit! 💪';
-  else msg = 'Ay sus! Aral muna tayo ha? 😅';
+  let submsg = '';
+
+  if(pct === 100) {
+    msg = 'PERFECT! Ang galing mo naman! 🎉🇵🇭';
+    submsg = 'Pinoy genius ka talaga. Subukan mo uli para mapanatili ang perfect streak mo!';
+  } else if(pct >= 80) {
+    msg = 'Magaling! Tunay kang Pinoy! 🌟';
+    submsg = 'Konti na lang at perfect na. Kaya mo pang higitan ang score mo!';
+  } else if(pct >= 60) {
+    msg = 'Hindi naman masama! Konting aral pa! 📚';
+    submsg = 'Practice lang nang practice. Baka sa next round mas mataas na!';
+  } else if(pct >= 40) {
+    msg = 'Kaya mo pa yan! Try ulit! 💪';
+    submsg = 'Warm-up pa lang ito. Pili ka ulit ng category at bumawi!';
+  } else {
+    msg = 'Ay sus! Aral muna tayo ha? 😅';
+    submsg = 'Okay lang yan — every round is a chance to learn something new.';
+  }
 
   document.getElementById('resultsCatLabel').textContent = QUESTIONS[currentCat].icon + ' ' + currentCat;
 
@@ -577,6 +607,7 @@ function endQuiz() {
       <div class="score-num">${score}</div>
       <div class="score-label">points</div>
     </div>
+    ${isNewBest ? `<div class="best-badge">🏆 New Best Score!</div>` : (previousBest > 0 ? `<div class="result-submsg">Best score to beat: <strong>${previousBest}</strong></div>` : '')}
     <div class="result-stars">
       ${[0,1,2].map(i => `<div class="rstar ${i < stars ? 'earned' : 'empty'}" style="animation-delay:${0.3+i*0.2}s"></div>`).join('')}
     </div>
@@ -586,13 +617,35 @@ function endQuiz() {
       <div class="stat-item"><div class="stat-val">${stars}/3</div><div class="stat-lbl">Stars</div></div>
     </div>
     <div class="result-msg">${msg}</div>
+    <div class="result-submsg">${submsg}</div>
     <div class="result-actions">
       <button class="btn-play" onclick="startQuiz('${currentCat}')">Laro Ulit!</button>
+      <button class="btn-secondary" onclick="shareScore()">Share Score</button>
       <button class="btn-secondary" onclick="showScreen('categories')">Ibang Category</button>
       <button class="btn-secondary" onclick="showScreen('menu')">Main Menu</button>
     </div>
   `;
   showScreen('results');
+}
+
+// ===== SHARE =====
+function shareScore() {
+  const text = `I scored ${score} points on Alam Mo Ba?! Pinoy Quiz in ${currentCat}! Subukan mo rin!`;
+  const url = window.location.href;
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'Alam Mo Ba?! Pinoy Quiz',
+      text,
+      url
+    }).catch(() => {});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(`${text} ${url}`)
+      .then(() => alert('Score link copied! I-share mo na!'))
+      .catch(() => alert(text));
+  } else {
+    alert(text);
+  }
 }
 
 // ===== UTILITY =====
