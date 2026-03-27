@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Alam Mo Ba?! Pinoy Quiz</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --blue:#0038A8;--blue-dark:#002880;--blue-light:#1a5cc8;
+  --red:#CE1126;--red-dark:#a00d1e;--red-glow:#ff2a44;
+  --gold:#FCD116;--gold-dark:#dab510;--gold-glow:#ffe44d;
+  --white:#FAFAF8;--cream:#FFF8EC;
+  --text-dark:#1a1a2e;--text-mid:#555;--text-light:#888;
+}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Nunito',sans-serif;
+  background:var(--blue-dark);
+  color:var(--text-dark);
+  display:flex;justify-content:center;align-items:center;
+}
+#app{
+  width:100%;max-width:420px;height:100vh;max-height:900px;
+  background:var(--white);position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+/* Shared header bar */
+.header-bar{
+  background:linear-gradient(135deg,var(--blue),var(--blue-dark));
+  padding:20px 20px 16px;text-align:center;position:relative;
+  flex-shrink:0;
+}
+.header-bar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--red)}
+.screen{display:none;flex-direction:column;height:100%;overflow:hidden}
+.screen.active{display:flex}
+.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+
+/* ===== MAIN MENU ===== */
+#menu .header-bar{padding:30px 20px 24px}
+.menu-stars{display:flex;gap:8px;justify-content:center;margin-bottom:6px}
+.menu-star{width:16px;height:16px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.menu-title{font-family:'Fredoka',sans-serif;font-size:32px;font-weight:700;color:var(--gold);text-shadow:2px 2px 0 rgba(0,0,0,0.2)}
+.menu-subtitle{font-size:14px;color:rgba(255,255,255,0.85);letter-spacing:1.5px;font-weight:600;margin-top:2px}
+.sun-badge{
+  width:80px;height:80px;margin:24px auto 20px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+}
+.sun-core{
+  width:56px;height:56px;background:var(--gold);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fredoka',sans-serif;font-size:24px;font-weight:700;color:var(--blue);
+  box-shadow:0 0 30px rgba(252,209,22,0.4);
+  animation:pulse 2s ease-in-out infinite;
+}
+@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(252,209,22,0.3)}50%{box-shadow:0 0 40px rgba(252,209,22,0.6)}}
+.sun-ray-ring{position:absolute;width:80px;height:80px;animation:spin 20s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sray{position:absolute;width:4px;height:12px;background:var(--gold);border-radius:2px;top:0;left:38px;transform-origin:center 40px}
+.menu-body{padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.btn-play{
+  width:220px;padding:16px;background:var(--red);color:#fff;border:none;border-radius:40px;
+  font-family:'Fredoka',sans-serif;font-size:20px;font-weight:600;cursor:pointer;
+  box-shadow:0 4px 0 var(--red-dark),0 6px 20px rgba(206,17,38,0.3);
+  transition:all 0.15s;position:relative;
+}
+.btn-play:active{transform:translateY(3px);box-shadow:0 1px 0 var(--red-dark)}
+.btn-secondary{
+  width:220px;padding:12px;background:transparent;color:var(--blue);
+  border:2.5px solid var(--blue);border-radius:40px;
+  font-family:'Fredoka',sans-serif;font-size:15px;font-weight:600;cursor:pointer;
+  transition:all 0.15s;
+}
+.btn-secondary:active{background:var(--blue);color:#fff}
+.menu-footer{margin-top:auto;padding:16px;text-align:center;font-size:11px;color:var(--text-light)}
+.highscore-badge{
+  background:var(--cream);border:2px solid var(--gold);border-radius:12px;
+  padding:8px 20px;font-size:13px;color:var(--blue);font-weight:700;margin-top:4px;
+}
+.highscore-badge span{color:var(--red);font-size:18px}
+
+/* ===== CATEGORY SELECT ===== */
+.cat-grid{padding:16px;display:flex;flex-direction:column;gap:10px}
+.cat-card{
+  display:flex;align-items:center;gap:14px;padding:14px 16px;
+  background:#fff;border-radius:14px;border:2px solid #f0ebe0;
+  cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;
+}
+.cat-card:active{transform:scale(0.97);border-color:var(--blue)}
+.cat-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
+  background:var(--blue);opacity:0;transition:opacity 0.2s;
+}
+.cat-card:active::before{opacity:1}
+.cat-icon{
+  width:44px;height:44px;border-radius:10px;display:flex;
+  align-items:center;justify-content:center;font-size:24px;flex-shrink:0;
+}
+.cat-info{flex:1}
+.cat-name{font-family:'Fredoka',sans-serif;font-size:15px;font-weight:600;color:var(--text-dark)}
+.cat-count{font-size:12px;color:var(--text-mid);margin-top:1px}
+.cat-best{
+  font-size:11px;font-weight:700;color:var(--gold-dark);
+  background:var(--cream);padding:2px 8px;border-radius:8px;
+}
+
+/* ===== QUIZ SCREEN ===== */
+#quiz .header-bar{padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.quiz-cat-label{font-size:13px;color:#fff;font-weight:600}
+.quiz-score-pill{
+  font-size:13px;color:var(--gold);font-weight:700;
+  background:rgba(255,255,255,0.12);padding:4px 12px;border-radius:12px;
+}
+.timer-track{height:6px;background:#e8e4d8;flex-shrink:0}
+.timer-fill{height:100%;background:var(--gold);transition:width 0.3s linear;border-radius:0 3px 3px 0}
+.timer-fill.warning{background:var(--red)}
+.quiz-body{padding:20px;flex:1;display:flex;flex-direction:column}
+.q-progress{font-size:12px;color:var(--text-mid);margin-bottom:8px;font-weight:600}
+.q-text{
+  font-family:'Fredoka',sans-serif;font-size:18px;font-weight:600;
+  color:var(--text-dark);line-height:1.4;margin-bottom:20px;
+}
+.answers{display:flex;flex-direction:column;gap:10px}
+.answer-btn{
+  width:100%;padding:14px 16px;border-radius:12px;border:2px solid #e8e4d8;
+  background:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:600;
+  color:var(--text-dark);cursor:pointer;text-align:left;
+  transition:all 0.2s;position:relative;
+}
+.answer-btn:active:not(.disabled){transform:scale(0.98)}
+.answer-btn.selected{border-color:var(--blue);background:#EEF2FF;color:var(--blue)}
+.answer-btn.correct{border-color:#4CAF50;background:#E8F5E9;color:#2E7D32}
+.answer-btn.correct::after{content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px}
+.answer-btn.wrong{border-color:var(--red);background:#FFEBEE;color:var(--red-dark)}
+.answer-btn.wrong::after{content:'✗';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px}
+.answer-btn.disabled{pointer-events:none;opacity:0.6}
+.answer-btn.disabled.correct{opacity:1}
+.explanation-box{
+  margin-top:16px;padding:12px 14px;background:#EEF7EE;border-radius:10px;
+  font-size:13px;color:#2E7D32;line-height:1.5;
+  animation:fadeUp 0.3s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.next-btn{
+  margin-top:auto;padding:14px;background:var(--blue);color:#fff;
+  border:none;border-radius:14px;font-family:'Fredoka',sans-serif;
+  font-size:16px;font-weight:600;cursor:pointer;
+  transition:all 0.15s;
+}
+.next-btn:active{transform:scale(0.97)}
+
+/* ===== RESULTS SCREEN ===== */
+#results .header-bar{padding:24px 20px 20px}
+.results-title{font-family:'Fredoka',sans-serif;font-size:24px;font-weight:700;color:var(--gold)}
+.results-sub{font-size:13px;color:rgba(255,255,255,0.8);margin-top:4px}
+.results-body{padding:24px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.score-circle{
+  width:140px;height:140px;border-radius:50%;
+  background:linear-gradient(135deg,var(--blue),var(--blue-light));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  box-shadow:0 8px 30px rgba(0,56,168,0.3);
+  animation:scaleIn 0.5s ease;
+}
+@keyframes scaleIn{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
+.score-num{font-family:'Fredoka',sans-serif;font-size:42px;font-weight:700;color:var(--gold)}
+.score-label{font-size:12px;color:rgba(255,255,255,0.8);margin-top:-4px}
+.result-stars{display:flex;gap:8px;margin-top:4px}
+.rstar{width:36px;height:36px;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);transition:all 0.3s}
+.rstar.earned{background:var(--gold);animation:starPop 0.4s ease}
+.rstar.empty{background:#ddd}
+@keyframes starPop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
+.result-stats{
+  width:100%;background:var(--cream);border-radius:14px;padding:16px;
+  display:flex;justify-content:space-around;text-align:center;
+}
+.stat-item .stat-val{font-family:'Fredoka',sans-serif;font-size:22px;font-weight:700;color:var(--blue)}
+.stat-item .stat-lbl{font-size:11px;color:var(--text-mid);margin-top:2px}
+.result-msg{
+  font-family:'Fredoka',sans-serif;font-size:16px;color:var(--text-dark);
+  text-align:center;line-height:1.4;padding:0 10px;
+}
+.result-actions{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:8px}
+.result-actions .btn-play{width:100%}
+.result-actions .btn-secondary{width:100%;text-align:center}
+
+/* ===== AD PLACEHOLDER ===== */
+.ad-banner{
+  flex-shrink:0;height:50px;background:#f5f0e5;
+  display:flex;align-items:center;justify-content:center;
+  font-size:11px;color:#bbb;border-top:1px solid #e8e4d8;
+  letter-spacing:0.5px;
+}
+
+/* ===== ANIMATIONS ===== */
+.fade-in{animation:fadeIn 0.3s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.slide-up{animation:slideUp 0.35s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== RESPONSIVE ===== */
+@media(max-height:700px){
+  .sun-badge{margin:12px auto 10px;width:60px;height:60px}
+  .sun-core{width:42px;height:42px;font-size:18px}
+  .menu-body{padding:16px;gap:10px}
+  #menu .header-bar{padding:20px 20px 16px}
+  .menu-title{font-size:26px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== MAIN MENU ===== -->
+  <div id="menu" class="screen active">
+    <div class="header-bar">
+      <div class="menu-stars"><div class="menu-star"></div><div class="menu-star"></div><div class="menu-star"></div></div>
+      <div class="menu-title">Alam Mo Ba?!</div>
+      <div class="menu-subtitle">PINOY QUIZ</div>
+    </div>
+    <div class="scroll-area">
+      <div class="menu-body">
+        <div class="sun-badge">
+          <div class="sun-ray-ring">
+            <div class="sray" style="transform:rotate(0deg)"></div>
+            <div class="sray" style="transform:rotate(45deg)"></div>
+            <div class="sray" style="transform:rotate(90deg)"></div>
+            <div class="sray" style="transform:rotate(135deg)"></div>
+            <div class="sray" style="transform:rotate(180deg)"></div>
+            <div class="sray" style="transform:rotate(225deg)"></div>
+            <div class="sray" style="transform:rotate(270deg)"></div>
+            <div class="sray" style="transform:rotate(315deg)"></div>
+          </div>
+          <div class="sun-core">?!</div>
+        </div>
+        <div class="highscore-badge">Best Score: <span id="globalBest">0</span></div>
+        <button class="btn-play" onclick="showScreen('categories')">LARO NA!</button>
+        <button class="btn-secondary" onclick="resetScores()">Reset Scores</button>
+      </div>
+    </div>
+    <div class="menu-footer">Alam Mo Ba?! v1.0 — Mabuhay! 🇵🇭</div>
+    <div class="ad-banner">[ Ad Space — Banner Ad ]</div>
+  </div>
+
+  <!-- ===== CATEGORY SELECT ===== -->
+  <div id="categories" class="screen">
+    <div class="header-bar">
+      <div style="font-family:'Fredoka',sans-serif;font-size:20px;font-weight:600;color:var(--gold)">Pumili ng Category</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.8);margin-top:2px">Choose your challenge!</div>
+    </div>
+    <div class="scroll-area">
+      <div class="cat-grid" id="catGrid"></div>
+    </div>
+    <div style="padding:12px 16px;flex-shrink:0">
+      <button class="btn-secondary" style="width:100%;text-align:center" onclick="showScreen('menu')">← Bumalik</button>
+    </div>
+    <div class="ad-banner">[ Ad Space — Banner Ad ]</div>
+  </div>
+
+  <!-- ===== QUIZ ===== -->
+  <div id="quiz" class="screen">
+    <div class="header-bar" id="quizHeader">
+      <div class="quiz-cat-label" id="quizCatLabel"></div>
+      <div class="quiz-score-pill">Score: <span id="quizScore">0</span></div>
+    </div>
+    <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
+    <div class="scroll-area">
+      <div class="quiz-body" id="quizBody"></div>
+    </div>
+  </div>
+
+  <!-- ===== RESULTS ===== -->
+  <div id="results" class="screen">
+    <div class="header-bar">
+      <div class="results-title">Game Over!</div>
+      <div class="results-sub" id="resultsCatLabel"></div>
+    </div>
+    <div class="scroll-area">
+      <div class="results-body" id="resultsBody"></div>
+    </div>
+    <div class="ad-banner">[ Ad Space — Interstitial Ad Here ]</div>
+  </div>
+
+</div>
+
+<script>
+// ===== QUIZ DATA =====
+const QUESTIONS = {
+  "Philippine History": {
+    icon: "📜", bg: "#EEF2FF",
+    questions: [
+      {q:"Sino ang tinaguriang 'Ama ng Wikang Filipino'?",o:["Jose Rizal","Andres Bonifacio","Manuel L. Quezon","Emilio Aguinaldo"],c:2,e:"Si Manuel L. Quezon ang naging advocate para sa pagkakaroon ng national language."},
+      {q:"Anong taon idineklara ang Philippine Independence mula sa Spain?",o:["1896","1898","1900","1901"],c:1,e:"June 12, 1898 sa Kawit, Cavite idineklara ni Aguinaldo ang kalayaan."},
+      {q:"What is the longest-running revolt in Philippine history?",o:["Dagohoy Revolt","Silang Revolt","Bankaw Revolt","Malong Revolt"],c:0,e:"The Dagohoy Revolt lasted 85 years (1744-1829) in Bohol."},
+      {q:"Sino ang sumulat ng 'Noli Me Tangere'?",o:["Marcelo H. del Pilar","Jose Rizal","Graciano Lopez Jaena","Apolinario Mabini"],c:1,e:"Isinulat ni Jose Rizal ang Noli Me Tangere noong 1887 sa Berlin, Germany."},
+      {q:"Ano ang dating pangalan ng Pilipinas noong panahon ng Kastila?",o:["Las Islas Filipinas","Pearl of the Orient","Maharlika","Luzviminda"],c:0,e:"Pinangalanan itong Las Islas Filipinas bilang tribute kay King Philip II ng Spain."},
+      {q:"Who was the first President of the Philippines?",o:["Manuel Quezon","Emilio Aguinaldo","Jose P. Laurel","Sergio Osmeña"],c:1,e:"Emilio Aguinaldo became the first president of the First Philippine Republic in 1899."},
+      {q:"Saan naganap ang Cry of Pugad Lawin?",o:["Cavite","Quezon City","Bulacan","Manila"],c:1,e:"Naganap ito sa kasalukuyang Quezon City noong August 1896."},
+      {q:"What was EDSA Revolution also known as?",o:["Yellow Revolution","Velvet Revolution","People Power Revolution","Freedom Revolution"],c:2,e:"The 1986 EDSA People Power Revolution peacefully ousted President Marcos."},
+      {q:"Sino ang 'Supremo' ng Katipunan?",o:["Jose Rizal","Andres Bonifacio","Emilio Aguinaldo","Apolinario Mabini"],c:1,e:"Si Andres Bonifacio ang naging Supremo o pinakamataas na pinuno ng KKK."},
+      {q:"Anong taon naging Commonwealth ang Pilipinas?",o:["1935","1942","1946","1898"],c:0,e:"Ang Philippine Commonwealth ay naitatag noong November 15, 1935."}
+    ]
+  },
+  "Filipino Food": {
+    icon: "🍛", bg: "#FFF5F5",
+    questions: [
+      {q:"Anong probinsya ang kilala bilang 'Sisig Capital of the Philippines'?",o:["Bulacan","Pampanga","Tarlac","Bataan"],c:1,e:"Ang Pampanga, lalo na ang Angeles City, ang kilala bilang sisig capital."},
+      {q:"What is the main ingredient of 'kare-kare'?",o:["Pork belly","Oxtail","Chicken","Fish"],c:1,e:"Kare-kare is traditionally made with oxtail in a thick peanut sauce."},
+      {q:"Saan nagmula ang 'lechon' na tradisyon?",o:["China","Spain","America","Japan"],c:1,e:"Ang lechon ay nagmula sa Spanish tradition ng roasting whole pigs."},
+      {q:"What Filipino dessert is made from purple yam?",o:["Leche flan","Ube halaya","Biko","Turon"],c:1,e:"Ube halaya is a sweet jam made from boiled and mashed purple yam."},
+      {q:"Ano ang tawag sa Filipino breakfast na may garlic rice, egg, at meat?",o:["Silog","Merienda","Pulutan","Handaan"],c:0,e:"Silog comes from 'sinangag' (garlic rice) + 'itlog' (egg)."},
+      {q:"Which region is known as the 'Bagnet Capital'?",o:["Cebu","Ilocos","Bicol","Davao"],c:1,e:"Bagnet is a crispy deep-fried pork belly dish from the Ilocos region."},
+      {q:"Ano ang pangunahing sangkap ng Bicol Express?",o:["Bagoong","Coconut milk at sili","Tamarind","Soy sauce"],c:1,e:"Bicol Express uses gata (coconut milk) and lots of sili (chili peppers)."},
+      {q:"What is 'balut'?",o:["Fried quail eggs","Fertilized duck egg","Salted egg","Boiled chicken egg"],c:1,e:"Balut is a fertilized developing duck egg boiled and eaten as street food."},
+      {q:"Saang parte ng Pilipinas famous ang 'pochero'?",o:["Visayas","Mindanao","Luzon","Palawan"],c:0,e:"Pochero is especially popular in the Visayas, particularly Cebu."},
+      {q:"Anong klaseng suka ang commonly ginagamit sa adobo?",o:["Sukang iloko","Sukang tuba","Sukang maasim","Lahat ng nabanggit"],c:3,e:"Depende sa region, iba-ibang suka ang ginagamit sa adobo!"}
+    ]
+  },
+  "Philippine Culture": {
+    icon: "🎭", bg: "#FFF8E7",
+    questions: [
+      {q:"Ano ang tawag sa Filipino gesture ng pag-point gamit ang lips?",o:["Nguso","Tingin","Kilay","Turo"],c:0,e:"Ang 'nguso' o pag-point gamit ang labi ay uniquely Filipino gesture!"},
+      {q:"What is 'mano po'?",o:["A dance","A greeting to elders","A type of food","A prayer"],c:1,e:"Mano po is taking an elder's hand and pressing it to your forehead as respect."},
+      {q:"Anong festival ang pinakamalaki sa Cebu?",o:["Ati-Atihan","Sinulog","Pahiyas","MassKara"],c:1,e:"Ang Sinulog Festival ay ginagawa tuwing third Sunday of January sa Cebu."},
+      {q:"What is 'bayanihan'?",o:["A type of boat","Community spirit of helping","A martial art","A traditional song"],c:1,e:"Bayanihan refers to the Filipino tradition of communal unity and helping neighbors."},
+      {q:"Ano ang 'pasalubong'?",o:["A souvenir or gift from a trip","A type of dance","A greeting","A holiday"],c:0,e:"Pasalubong is bringing gifts or treats for family when coming home from a trip."},
+      {q:"Which Filipino value means 'shame' or 'sense of propriety'?",o:["Utang na loob","Hiya","Pakikisama","Bayanihan"],c:1,e:"Hiya is a complex social value related to shame, modesty, and social propriety."},
+      {q:"Ano ang pambansang sayaw ng Pilipinas?",o:["Tinikling","Pandanggo sa Ilaw","Cariñosa","Kuratsa"],c:2,e:"Ang Cariñosa ang opisyal na national dance ng Pilipinas."},
+      {q:"What does 'po' and 'opo' signify in Filipino?",o:["Agreement","Respect","Excitement","Sadness"],c:1,e:"Po and opo are used to show respect, especially when speaking to elders."},
+      {q:"Saan ginagawa ang MassKara Festival?",o:["Iloilo","Bacolod","Davao","Zamboanga"],c:1,e:"Ang MassKara Festival ay celebration ng Bacolod City tuwing October."},
+      {q:"What is 'Filipino time' commonly known as?",o:["Being very early","Being exactly on time","Being fashionably late","Skipping events"],c:2,e:"Filipino time humorously refers to arriving later than the scheduled time."}
+    ]
+  },
+  "Philippine Geography": {
+    icon: "🏝️", bg: "#E7FFF2",
+    questions: [
+      {q:"Ilan ang islands ng Pilipinas?",o:["5,000","7,641","10,000","3,500"],c:1,e:"Ang Pilipinas ay binubuo ng 7,641 islands based sa latest NAMRIA count."},
+      {q:"What is the tallest mountain in the Philippines?",o:["Mt. Pinatubo","Mt. Apo","Mt. Pulag","Mt. Mayon"],c:1,e:"Mt. Apo in Davao stands at 2,954 meters — the highest peak in the Philippines."},
+      {q:"Saang probinsya makikita ang Chocolate Hills?",o:["Cebu","Bohol","Palawan","Leyte"],c:1,e:"Ang Chocolate Hills ay nasa Bohol — may mahigit 1,200 cone-shaped hills."},
+      {q:"Which Philippine river is the longest?",o:["Pasig River","Cagayan River","Agusan River","Pampanga River"],c:1,e:"The Cagayan River (Rio Grande de Cagayan) is 505 km long."},
+      {q:"Ano ang pinakamaliit na volcano sa mundo na nasa Pilipinas?",o:["Mt. Pinatubo","Taal Volcano","Mt. Mayon","Mt. Hibok-Hibok"],c:1,e:"Ang Taal Volcano sa Batangas ay isa sa pinakamaliit na active volcanoes sa mundo."},
+      {q:"What is the largest island in the Philippines?",o:["Mindanao","Visayas","Luzon","Palawan"],c:2,e:"Luzon is the largest island with an area of about 109,965 sq km."},
+      {q:"Saan matatagpuan ang Tubbataha Reefs?",o:["Palawan","Cebu","Mindoro","Bohol"],c:0,e:"Ang Tubbataha Reefs Natural Park ay nasa Sulu Sea, part ng Palawan."},
+      {q:"Which city is the 'Summer Capital of the Philippines'?",o:["Tagaytay","Baguio","Davao","Sagada"],c:1,e:"Baguio City is called the Summer Capital due to its cool mountain climate."},
+      {q:"Ano ang pinakamalalim na bahagi ng dagat malapit sa Pilipinas?",o:["Mariana Trench","Philippine Trench","Sulu Trench","Manila Trench"],c:0,e:"The Mariana Trench, east of the Philippines, is the deepest point on Earth."},
+      {q:"Saang probinsya ang Puerto Princesa Underground River?",o:["Cebu","Mindoro","Palawan","Bohol"],c:2,e:"Ang Puerto Princesa Subterranean River National Park ay UNESCO World Heritage Site sa Palawan."}
+    ]
+  },
+  "Pinoy Pop Culture": {
+    icon: "🎬", bg: "#F3EEFF",
+    questions: [
+      {q:"Ano ang tawag sa iconic Filipino TV format na 'noon time show'?",o:["Eat Bulaga!","Showtime","Wowowin","Lahat ng nabanggit"],c:3,e:"All of these are famous Filipino noontime shows!"},
+      {q:"What classic Filipino game involves a slipper?",o:["Patintero","Tumbang preso","Luksong tinik","Agawan base"],c:1,e:"Tumbang preso uses a slipper (tsinelas) to knock down a tin can."},
+      {q:"Sino ang 'Star for All Seasons'?",o:["Nora Aunor","Vilma Santos","Sharon Cuneta","Sarah Geronimo"],c:1,e:"Si Vilma Santos ang tinaguriang 'Star for All Seasons' sa Philippine cinema."},
+      {q:"Anong laro ang 'piko'?",o:["Tag","Hopscotch","Hide and seek","Jump rope"],c:1,e:"Piko is the Filipino version of hopscotch, played with a pamato (stone)."},
+      {q:"Who is the Philippine 'King of Comedy'?",o:["Vice Ganda","Dolphy","Vic Sotto","Jose de Leon"],c:1,e:"Dolphy (Rodolfo Vera Quizon Sr.) is widely regarded as the King of Philippine Comedy."},
+      {q:"Anong Pinoy superhero ang gawa ni Mars Ravelo?",o:["Captain Barbell","Darna","Panday","Pareho A at B"],c:3,e:"Si Darna at Captain Barbell ay parehong creation ni Mars Ravelo."},
+      {q:"What traditional Filipino instrument is made of bamboo?",o:["Kulintang","Banduria","Kubing","Rondalla"],c:2,e:"The kubing is a bamboo jaw harp used by various indigenous Filipino groups."},
+      {q:"Ano ang 'hugot'?",o:["A dance move","Deep emotional lines","A type of food","A sport"],c:1,e:"Hugot refers to deep, emotional quotes or pickup lines — very Pinoy!"},
+      {q:"Saang laro ang 'It' na humahabol sa mga players?",o:["Agawan base","Habulan/Tag","Chinese garter","Luksong baka"],c:1,e:"Habulan (or Tag) is where the 'It' chases and tries to tag other players."},
+      {q:"What Filipino card game is similar to 'Crazy Eights'?",o:["Pusoy Dos","Tongits","Unggoy-ungguyan","Mahjong"],c:2,e:"Unggoy-ungguyan is a Filipino card game similar to Crazy Eights."}
+    ]
+  }
+};
+
+// ===== GAME STATE =====
+let currentCat = null;
+let currentQs = [];
+let currentIdx = 0;
+let score = 0;
+let correctCount = 0;
+let timer = null;
+let timeLeft = 15;
+const TIME_PER_Q = 15;
+let bestScores = {};
+
+// Load saved scores
+try { bestScores = JSON.parse(localStorage.getItem('alamMoBaBest') || '{}'); } catch(e) {}
+
+function saveBest() {
+  try { localStorage.setItem('alamMoBaBest', JSON.stringify(bestScores)); } catch(e) {}
+}
+
+function getGlobalBest() {
+  let best = 0;
+  Object.values(bestScores).forEach(s => { if(s > best) best = s; });
+  return best;
+}
+
+// ===== SCREEN MANAGEMENT =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  if(id === 'menu') updateMenu();
+  if(id === 'categories') renderCategories();
+}
+
+function updateMenu() {
+  document.getElementById('globalBest').textContent = getGlobalBest();
+}
+
+// ===== CATEGORIES =====
+function renderCategories() {
+  const grid = document.getElementById('catGrid');
+  grid.innerHTML = '';
+  Object.entries(QUESTIONS).forEach(([name, data], i) => {
+    const best = bestScores[name] || 0;
+    const card = document.createElement('div');
+    card.className = 'cat-card slide-up';
+    card.style.animationDelay = (i * 0.06) + 's';
+    card.innerHTML = `
+      <div class="cat-icon" style="background:${data.bg}">${data.icon}</div>
+      <div class="cat-info">
+        <div class="cat-name">${name}</div>
+        <div class="cat-count">10 tanong</div>
+      </div>
+      ${best > 0 ? `<div class="cat-best">Best: ${best}</div>` : ''}
+    `;
+    card.onclick = () => startQuiz(name);
+    grid.appendChild(card);
+  });
+}
+
+// ===== QUIZ =====
+function startQuiz(catName) {
+  currentCat = catName;
+  const data = QUESTIONS[catName];
+  currentQs = shuffleArray([...data.questions]).slice(0, 10);
+  currentIdx = 0;
+  score = 0;
+  correctCount = 0;
+  document.getElementById('quizCatLabel').textContent = data.icon + ' ' + catName;
+  document.getElementById('quizScore').textContent = '0';
+  showScreen('quiz');
+  renderQuestion();
+}
+
+function renderQuestion() {
+  clearInterval(timer);
+  timeLeft = TIME_PER_Q;
+  updateTimer();
+  startTimer();
+
+  const q = currentQs[currentIdx];
+  const body = document.getElementById('quizBody');
+  const letters = ['A','B','C','D'];
+
+  body.innerHTML = `
+    <div class="q-progress">Tanong ${currentIdx + 1} ng ${currentQs.length}</div>
+    <div class="q-text fade-in">${q.q}</div>
+    <div class="answers" id="answersArea">
+      ${q.o.map((opt, i) => `
+        <button class="answer-btn slide-up" style="animation-delay:${i*0.05}s" onclick="selectAnswer(${i})">${letters[i]}. ${opt}</button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function selectAnswer(idx) {
+  clearInterval(timer);
+  const q = currentQs[currentIdx];
+  const btns = document.querySelectorAll('#answersArea .answer-btn');
+  const isCorrect = idx === q.c;
+
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if(i === q.c) btn.classList.add('correct');
+    if(i === idx && !isCorrect) btn.classList.add('wrong');
+  });
+
+  if(isCorrect) {
+    const timeBonus = Math.ceil(timeLeft / TIME_PER_Q * 5);
+    const points = 10 + timeBonus;
+    score += points;
+    correctCount++;
+    document.getElementById('quizScore').textContent = score;
+  }
+
+  const body = document.getElementById('quizBody');
+  const expDiv = document.createElement('div');
+  expDiv.className = 'explanation-box';
+  expDiv.innerHTML = `💡 ${q.e}`;
+  body.querySelector('.answers').after(expDiv);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'next-btn slide-up';
+  nextBtn.textContent = currentIdx < currentQs.length - 1 ? 'Susunod →' : 'Tingnan ang Results →';
+  nextBtn.onclick = () => {
+    currentIdx++;
+    if(currentIdx < currentQs.length) {
+      renderQuestion();
+    } else {
+      endQuiz();
+    }
+  };
+  body.appendChild(nextBtn);
+}
+
+function timeUp() {
+  clearInterval(timer);
+  const q = currentQs[currentIdx];
+  const btns = document.querySelectorAll('#answersArea .answer-btn');
+  btns.forEach((btn, i) => {
+    btn.classList.add('disabled');
+    if(i === q.c) btn.classList.add('correct');
+  });
+
+  const body = document.getElementById('quizBody');
+  const expDiv = document.createElement('div');
+  expDiv.className = 'explanation-box';
+  expDiv.style.background = '#FFF3E0';
+  expDiv.style.color = '#E65100';
+  expDiv.innerHTML = `⏰ Naubos na ang oras! Ang tamang sagot: <b>${q.o[q.c]}</b><br>💡 ${q.e}`;
+  body.querySelector('.answers').after(expDiv);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'next-btn slide-up';
+  nextBtn.textContent = currentIdx < currentQs.length - 1 ? 'Susunod →' : 'Tingnan ang Results →';
+  nextBtn.onclick = () => {
+    currentIdx++;
+    if(currentIdx < currentQs.length) renderQuestion();
+    else endQuiz();
+  };
+  body.appendChild(nextBtn);
+}
+
+// ===== TIMER =====
+function startTimer() {
+  timer = setInterval(() => {
+    timeLeft -= 0.1;
+    if(timeLeft <= 0) { timeLeft = 0; timeUp(); }
+    updateTimer();
+  }, 100);
+}
+
+function updateTimer() {
+  const fill = document.getElementById('timerFill');
+  const pct = (timeLeft / TIME_PER_Q) * 100;
+  fill.style.width = pct + '%';
+  fill.classList.toggle('warning', timeLeft <= 5);
+}
+
+// ===== RESULTS =====
+function endQuiz() {
+  clearInterval(timer);
+  if(!bestScores[currentCat] || score > bestScores[currentCat]) {
+    bestScores[currentCat] = score;
+    saveBest();
+  }
+
+  const stars = correctCount >= 9 ? 3 : correctCount >= 7 ? 2 : correctCount >= 4 ? 1 : 0;
+  const pct = Math.round((correctCount / currentQs.length) * 100);
+  let msg = '';
+  if(pct === 100) msg = 'PERFECT! Ang galing mo naman! 🎉🇵🇭';
+  else if(pct >= 80) msg = 'Magaling! Tunay kang Pinoy! 🌟';
+  else if(pct >= 60) msg = 'Hindi naman masama! Konting aral pa! 📚';
+  else if(pct >= 40) msg = 'Kaya mo pa yan! Try ulit! 💪';
+  else msg = 'Ay sus! Aral muna tayo ha? 😅';
+
+  document.getElementById('resultsCatLabel').textContent = QUESTIONS[currentCat].icon + ' ' + currentCat;
+
+  const body = document.getElementById('resultsBody');
+  body.innerHTML = `
+    <div class="score-circle">
+      <div class="score-num">${score}</div>
+      <div class="score-label">points</div>
+    </div>
+    <div class="result-stars">
+      ${[0,1,2].map(i => `<div class="rstar ${i < stars ? 'earned' : 'empty'}" style="animation-delay:${0.3+i*0.2}s"></div>`).join('')}
+    </div>
+    <div class="result-stats">
+      <div class="stat-item"><div class="stat-val">${correctCount}/10</div><div class="stat-lbl">Tama</div></div>
+      <div class="stat-item"><div class="stat-val">${pct}%</div><div class="stat-lbl">Accuracy</div></div>
+      <div class="stat-item"><div class="stat-val">${stars}/3</div><div class="stat-lbl">Stars</div></div>
+    </div>
+    <div class="result-msg">${msg}</div>
+    <div class="result-actions">
+      <button class="btn-play" onclick="startQuiz('${currentCat}')">Laro Ulit!</button>
+      <button class="btn-secondary" onclick="showScreen('categories')">Ibang Category</button>
+      <button class="btn-secondary" onclick="showScreen('menu')">Main Menu</button>
+    </div>
+  `;
+  showScreen('results');
+}
+
+// ===== UTILITY =====
+function shuffleArray(arr) {
+  for(let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function resetScores() {
+  if(confirm('I-reset lahat ng scores? Sure ka ba?')) {
+    bestScores = {};
+    saveBest();
+    updateMenu();
+  }
+}
+
+// Init
+updateMenu();
+</script>
+</body>
+</html>
