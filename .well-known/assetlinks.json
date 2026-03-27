@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.rdahunanitservices.alamdoba",
+        "sha256_cert_fingerprints": ["3F:97:69:93:C0:41:37:7B:A8:72:BA:06:7B:36:BA:BE:C2:6C:9D:7A:BF:BC:13:B1:9D:F5:6D:10:BA:CA:CD:05"]
+      }
+    }]
