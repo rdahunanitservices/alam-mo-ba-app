@@ -11,1111 +11,815 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --blue:#0038A8;--blue-dark:#002270;--blue-light:#1a52cc;--blue-glow:rgba(0,56,168,0.25);
+  --blue:#0038A8;--blue-dark:#002270;--blue-light:#1a52cc;
   --red:#CE1126;--red-dark:#a00d1e;--red-light:#ff3347;
   --gold:#FCD116;--gold-dark:#c9a700;--gold-light:#ffe55a;
+  --green:#16a34a;--green-light:#22c55e;--green-bg:#dcfce7;
   --white:#FAFAF8;--cream:#FFF8EC;--cream2:#fff5e0;
   --text-dark:#12103a;--text-mid:#4a4870;--text-light:#9090aa;
-  --success:#22c55e;--success-bg:#dcfce7;
   --wrong:#ef4444;--wrong-bg:#fee2e2;
   --shadow-blue:0 8px 32px rgba(0,56,168,0.18);
   --shadow-gold:0 4px 20px rgba(252,209,22,0.35);
-  --r:18px;
 }
 html,body{height:100%;overflow:hidden}
-body{
-  font-family:'Nunito',sans-serif;
-  background:var(--blue-dark);
-  color:var(--text-dark);
-  display:flex;justify-content:center;align-items:center;
-}
-
-/* Animated BG */
-body::before{
-  content:'';position:fixed;inset:0;
-  background:
-    radial-gradient(ellipse at 20% 50%,rgba(0,56,168,0.6) 0%,transparent 60%),
-    radial-gradient(ellipse at 80% 20%,rgba(206,17,38,0.25) 0%,transparent 50%),
-    radial-gradient(ellipse at 60% 80%,rgba(252,209,22,0.12) 0%,transparent 50%),
-    linear-gradient(135deg,#001560,#000d3a);
-  z-index:-1;
-}
-
-#app{
-  width:100%;max-width:430px;height:100vh;max-height:900px;
-  background:var(--white);position:relative;overflow:hidden;
-  display:flex;flex-direction:column;
-  box-shadow:0 0 80px rgba(0,0,0,0.5);
-  border-radius:0;
-}
+body{font-family:'Nunito',sans-serif;background:var(--blue-dark);color:var(--text-dark);display:flex;justify-content:center;align-items:center;}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 20% 50%,rgba(0,56,168,0.6),transparent 60%),radial-gradient(ellipse at 80% 20%,rgba(206,17,38,0.2),transparent 50%),linear-gradient(135deg,#001560,#000d3a);z-index:-1;}
+#app{width:100%;max-width:430px;height:100vh;max-height:900px;background:var(--white);position:relative;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 0 80px rgba(0,0,0,0.5);}
 @media(min-height:901px){#app{border-radius:24px;height:900px}}
-
-.offline-banner{
-  display:none;
-  background:linear-gradient(90deg,#fef3c7,#fde68a);
-  color:#78350f;
-  text-align:center;
-  font-size:12px;font-weight:800;
-  padding:8px 14px;
-  border-bottom:1px solid #fcd34d;
-  z-index:10;
-}
-.offline-banner.show{display:block}
-
-/* HEADER BAR */
-.header-bar{
-  background:linear-gradient(160deg,var(--blue-light) 0%,var(--blue) 50%,var(--blue-dark) 100%);
-  padding:20px 20px 16px;text-align:center;position:relative;
-  flex-shrink:0;overflow:hidden;
-}
-.header-bar::before{
-  content:'';position:absolute;inset:0;
-  background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-}
-.header-bar::after{
-  content:'';
-  position:absolute;bottom:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--red),var(--gold),var(--red));
-}
-
 .screen{display:none;flex-direction:column;height:100%;overflow:hidden}
 .screen.active{display:flex}
 .scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.scroll-area::-webkit-scrollbar{width:4px}
-.scroll-area::-webkit-scrollbar-track{background:transparent}
+.scroll-area::-webkit-scrollbar{width:3px}
 .scroll-area::-webkit-scrollbar-thumb{background:var(--blue-light);border-radius:2px}
-
-/* ===== MAIN MENU ===== */
-#menu .header-bar{padding:28px 20px 22px}
-
-.menu-flag-strip{
-  display:flex;height:5px;position:absolute;top:0;left:0;right:0;
-}
-.mfs-blue{flex:1;background:var(--blue)}
-.mfs-red{flex:1;background:var(--red)}
-.mfs-white{flex:1;background:#fff}
-.mfs-gold{flex:1;background:var(--gold)}
-
-.menu-stars{display:flex;gap:10px;justify-content:center;margin-bottom:8px}
-.menu-star{
-  width:14px;height:14px;background:var(--gold);
-  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-  animation:twinkle 1.5s ease-in-out infinite;
-}
-.menu-star:nth-child(2){animation-delay:0.3s}
-.menu-star:nth-child(3){animation-delay:0.6s}
-@keyframes twinkle{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.85)}}
-
-.menu-title{
-  font-family:'Fredoka One',cursive;font-size:38px;font-weight:400;
-  color:var(--gold);
-  text-shadow:0 2px 0 var(--gold-dark),0 4px 16px rgba(252,209,22,0.4);
-  letter-spacing:1px;
-}
-.menu-subtitle{
-  font-size:11px;color:rgba(255,255,255,0.75);
-  letter-spacing:4px;font-weight:800;margin-top:3px;
-}
-
-/* Sun badge */
-.sun-badge{
-  width:90px;height:90px;margin:22px auto 16px;position:relative;
-  display:flex;align-items:center;justify-content:center;
-}
-.sun-core{
-  width:60px;height:60px;background:linear-gradient(135deg,var(--gold-light),var(--gold));
-  border-radius:50%;
-  display:flex;align-items:center;justify-content:center;
-  font-family:'Fredoka One',cursive;font-size:22px;color:var(--blue-dark);
-  box-shadow:0 0 0 4px rgba(252,209,22,0.2),var(--shadow-gold);
-  animation:pulse 2.5s ease-in-out infinite;
-  position:relative;z-index:2;
-}
-@keyframes pulse{
-  0%,100%{box-shadow:0 0 0 4px rgba(252,209,22,0.15),0 0 20px rgba(252,209,22,0.3)}
-  50%{box-shadow:0 0 0 8px rgba(252,209,22,0.25),0 0 40px rgba(252,209,22,0.5)}
-}
-.sun-ray-ring{position:absolute;width:90px;height:90px;animation:spin 18s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.sray{
-  position:absolute;width:3px;height:14px;
-  background:linear-gradient(to bottom,var(--gold),transparent);
-  border-radius:2px;top:0;left:43.5px;transform-origin:center 45px;
-}
-
-.menu-body{padding:20px 24px;display:flex;flex-direction:column;align-items:center;gap:12px}
-
-.highscore-badge{
-  background:linear-gradient(135deg,var(--cream),var(--cream2));
-  border:2px solid var(--gold);border-radius:14px;
-  padding:10px 24px;font-size:14px;color:var(--blue-dark);font-weight:700;
-  box-shadow:var(--shadow-gold);
-  display:flex;align-items:center;gap:8px;
-}
-.highscore-badge .trophy{font-size:18px}
-.highscore-badge span{color:var(--red);font-size:20px;font-family:'Fredoka One',cursive}
-
-.btn-play{
-  width:100%;max-width:240px;padding:16px;
-  background:linear-gradient(135deg,var(--red-light),var(--red));
-  color:#fff;border:none;border-radius:50px;
-  font-family:'Fredoka One',cursive;font-size:22px;font-weight:400;cursor:pointer;
-  box-shadow:0 4px 0 var(--red-dark),0 8px 24px rgba(206,17,38,0.35);
-  transition:all 0.15s;letter-spacing:1px;
-  position:relative;overflow:hidden;
-}
-.btn-play::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(180deg,rgba(255,255,255,0.15) 0%,transparent 50%);
-  border-radius:inherit;
-}
-.btn-play:active{transform:translateY(3px);box-shadow:0 1px 0 var(--red-dark),0 4px 12px rgba(206,17,38,0.2)}
-
-.btn-secondary{
-  width:100%;max-width:240px;padding:12px;
-  background:rgba(0,56,168,0.06);color:var(--blue);
-  border:2px solid rgba(0,56,168,0.25);border-radius:50px;
-  font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;
-  transition:all 0.15s;
-}
+.header-bar{background:linear-gradient(160deg,var(--blue-light),var(--blue),var(--blue-dark));padding:20px 20px 16px;text-align:center;position:relative;flex-shrink:0;overflow:hidden;}
+.header-bar::before{content:'';position:absolute;inset:0;background:url("data:image/svg+xml,%3Csvg width='40' height='40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23fff' fill-opacity='.04'%3E%3Crect x='20' y='20' width='4' height='4'/%3E%3C/g%3E%3C/svg%3E");}
+.header-bar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--red),var(--gold),var(--red));}
+.offline-banner{display:none;background:linear-gradient(90deg,#fef3c7,#fde68a);color:#78350f;text-align:center;font-size:12px;font-weight:800;padding:8px 14px;border-bottom:1px solid #fcd34d;flex-shrink:0;}
+.offline-banner.show{display:block}
+.btn-play{width:100%;padding:16px;background:linear-gradient(135deg,var(--red-light),var(--red));color:#fff;border:none;border-radius:50px;font-family:'Fredoka One',cursive;font-size:22px;cursor:pointer;box-shadow:0 4px 0 var(--red-dark),0 8px 24px rgba(206,17,38,0.3);transition:all .15s;position:relative;overflow:hidden;}
+.btn-play::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.15),transparent 50%);border-radius:inherit;}
+.btn-play:active{transform:translateY(3px);box-shadow:0 1px 0 var(--red-dark)}
+.btn-secondary{width:100%;padding:12px;background:rgba(0,56,168,.06);color:var(--blue);border:2px solid rgba(0,56,168,.2);border-radius:50px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;transition:all .15s;}
 .btn-secondary:active{background:var(--blue);color:#fff;border-color:var(--blue)}
+.ad-banner{flex-shrink:0;height:50px;background:linear-gradient(135deg,#f9f5ee,#f5f0e4);display:flex;align-items:center;justify-content:center;font-size:10px;color:#bba880;border-top:1px solid #e8e4d8;letter-spacing:1px;font-weight:700;text-transform:uppercase;}
 
-.settings-row{
-  display:flex;gap:8px;justify-content:center;flex-wrap:wrap;width:100%;margin-top:4px;
-}
-.toggle-btn{
-  padding:8px 16px;border-radius:999px;
-  border:2px solid rgba(0,56,168,0.2);
-  background:rgba(0,56,168,0.05);
-  color:var(--text-mid);font-size:12px;font-weight:800;cursor:pointer;
-  transition:all 0.15s;display:flex;align-items:center;gap:5px;
-}
+/* ===== MENU ===== */
+#menu .header-bar{padding:26px 20px 20px}
+.menu-stars{display:flex;gap:10px;justify-content:center;margin-bottom:8px}
+.menu-star{width:13px;height:13px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);animation:twinkle 1.5s ease-in-out infinite;}
+.menu-star:nth-child(2){animation-delay:.3s}.menu-star:nth-child(3){animation-delay:.6s}
+@keyframes twinkle{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
+.menu-title{font-family:'Fredoka One',cursive;font-size:36px;color:var(--gold);text-shadow:0 2px 0 var(--gold-dark),0 4px 16px rgba(252,209,22,.4);}
+.menu-subtitle{font-size:11px;color:rgba(255,255,255,.7);letter-spacing:4px;font-weight:800;margin-top:2px}
+.sun-badge{width:80px;height:80px;margin:18px auto 14px;position:relative;display:flex;align-items:center;justify-content:center;}
+.sun-core{width:54px;height:54px;background:linear-gradient(135deg,var(--gold-light),var(--gold));border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:20px;color:var(--blue-dark);animation:pulse 2.5s ease-in-out infinite;z-index:2;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px rgba(252,209,22,.15),0 0 20px rgba(252,209,22,.3)}50%{box-shadow:0 0 0 8px rgba(252,209,22,.25),0 0 40px rgba(252,209,22,.5)}}
+.sun-ray-ring{position:absolute;width:80px;height:80px;animation:spin 18s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sray{position:absolute;width:3px;height:12px;background:linear-gradient(to bottom,var(--gold),transparent);border-radius:2px;top:0;left:38.5px;transform-origin:center 40px;}
+.menu-body{padding:18px 22px;display:flex;flex-direction:column;align-items:center;gap:11px}
+.xp-card{width:100%;background:linear-gradient(135deg,var(--cream),var(--cream2));border:2px solid var(--gold);border-radius:16px;padding:12px 16px;}
+.xp-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.xp-rank{font-family:'Fredoka One',cursive;font-size:16px;color:var(--blue)}
+.xp-pts{font-size:12px;font-weight:800;color:var(--text-mid)}
+.xp-bar-track{height:10px;background:#e5e7eb;border-radius:99px;overflow:hidden;}
+.xp-bar-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:99px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+.xp-bar-label{font-size:10px;color:var(--text-light);margin-top:4px;text-align:right;font-weight:700}
+.highscore-badge{background:linear-gradient(135deg,var(--cream),var(--cream2));border:2px solid var(--gold);border-radius:14px;padding:8px 20px;font-size:13px;color:var(--blue-dark);font-weight:700;box-shadow:var(--shadow-gold);display:flex;align-items:center;gap:8px;}
+.highscore-badge span{color:var(--red);font-size:19px;font-family:'Fredoka One',cursive}
+.settings-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;width:100%}
+.toggle-btn{padding:8px 14px;border-radius:999px;border:2px solid rgba(0,56,168,.2);background:rgba(0,56,168,.05);color:var(--text-mid);font-size:12px;font-weight:800;cursor:pointer;transition:all .15s;}
 .toggle-btn.active{background:var(--blue);color:#fff;border-color:var(--blue)}
-.toggle-btn:active{transform:scale(0.95)}
-
-.menu-footer{
-  margin-top:4px;padding:12px 16px;text-align:center;
-  font-size:11px;color:var(--text-light);line-height:1.8;
-}
+.menu-footer{padding:10px 16px;text-align:center;font-size:11px;color:var(--text-light);line-height:1.8}
 .menu-footer a{color:var(--text-light);text-decoration:underline}
 
-/* ===== CATEGORY SELECT ===== */
-.cat-header-inner{position:relative;z-index:1}
-.cat-header-title{
-  font-family:'Fredoka One',cursive;font-size:22px;color:var(--gold);
-}
-.cat-header-sub{font-size:12px;color:rgba(255,255,255,0.75);margin-top:2px;letter-spacing:1px}
+/* ===== MAP ===== */
+#mapscreen .header-bar{padding:12px 16px;display:flex;justify-content:space-between;align-items:center;text-align:left;}
+.map-title{font-family:'Fredoka One',cursive;font-size:18px;color:var(--gold)}
+.map-subtitle{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px}
+.map-xp-pill{background:rgba(0,0,0,.25);border:1px solid rgba(252,209,22,.3);border-radius:20px;padding:5px 12px;text-align:center;}
+.map-xp-pill .rank-label{font-family:'Fredoka One',cursive;font-size:13px;color:var(--gold)}
+.map-xp-pill .xp-label{font-size:10px;color:rgba(255,255,255,.6)}
+.map-container{position:relative;flex:1;overflow:hidden;background:linear-gradient(180deg,#dbeafe 0%,#93c5fd 50%,#60a5fa 100%);}
+.map-scroll{overflow-y:auto;height:100%;-webkit-overflow-scrolling:touch;position:relative;}
+.map-scroll::-webkit-scrollbar{display:none}
+#mapInner{position:relative;width:100%;}
+.region-banner{position:absolute;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.5);backdrop-filter:blur(4px);color:#fff;font-family:'Fredoka One',cursive;font-size:12px;padding:4px 16px;border-radius:999px;border:1px solid rgba(255,255,255,.2);white-space:nowrap;pointer-events:none;z-index:6;letter-spacing:.5px;}
+.level-node{position:absolute;width:54px;height:54px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;transform:translate(-50%,-50%);z-index:10;border:3px solid rgba(255,255,255,.5);}
+.level-node:active{transform:translate(-50%,-50%) scale(.9)}
+.level-node.locked{background:linear-gradient(135deg,#9ca3af,#6b7280);cursor:not-allowed;border-color:rgba(255,255,255,.2);box-shadow:0 4px 0 rgba(0,0,0,.2);}
+.level-node.unlocked{background:linear-gradient(135deg,#fbbf24,var(--gold));box-shadow:0 4px 0 rgba(0,0,0,.2),0 0 20px rgba(252,209,22,.5);animation:nodeGlow 2s ease-in-out infinite;}
+.level-node.completed-1{background:linear-gradient(135deg,#86efac,var(--green-light));box-shadow:0 4px 0 rgba(0,0,0,.2);}
+.level-node.completed-2{background:linear-gradient(135deg,#4ade80,var(--green));box-shadow:0 4px 0 rgba(0,0,0,.2);}
+.level-node.completed-3{background:linear-gradient(135deg,var(--gold-light),var(--gold));box-shadow:0 4px 0 rgba(0,0,0,.2),0 0 16px rgba(252,209,22,.4);}
+.level-node.current{background:linear-gradient(135deg,#fff,#e0f2fe);border-color:var(--blue);box-shadow:0 4px 0 rgba(0,0,0,.2);animation:currentPulse 1.5s ease-in-out infinite;}
+@keyframes nodeGlow{0%,100%{box-shadow:0 4px 0 rgba(0,0,0,.2),0 0 12px rgba(252,209,22,.4)}50%{box-shadow:0 4px 0 rgba(0,0,0,.2),0 0 28px rgba(252,209,22,.8)}}
+@keyframes currentPulse{0%,100%{box-shadow:0 4px 0 rgba(0,0,0,.2),0 0 0 4px rgba(0,56,168,.2)}50%{box-shadow:0 4px 0 rgba(0,0,0,.2),0 0 0 10px rgba(0,56,168,.35)}}
+.node-num{font-family:'Fredoka One',cursive;font-size:15px;line-height:1;color:var(--blue-dark);}
+.node-stars{display:flex;gap:1px;margin-top:2px;}
+.nstar{width:8px;height:8px;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.nstar.on{background:var(--gold-dark)}.nstar.off{background:rgba(0,0,0,.18)}
+.node-lock{font-size:20px;opacity:.45}
+.node-path{position:absolute;background:rgba(255,255,255,.3);z-index:5;border-radius:4px;pointer-events:none;}
 
-.cat-grid{padding:14px 14px 4px;display:flex;flex-direction:column;gap:10px}
+/* Level popup */
+.level-popup-overlay{position:absolute;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-end;z-index:100;animation:fadeIn .2s ease;}
+.level-popup{width:100%;background:var(--white);border-radius:24px 24px 0 0;padding:22px 22px 30px;animation:slideUp .3s cubic-bezier(.34,1.2,.64,1);}
+.popup-handle{width:40px;height:4px;background:#e5e7eb;border-radius:2px;margin:0 auto 16px;}
+.popup-region{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;margin-bottom:3px;}
+.popup-region.luzon{color:#16a34a}.popup-region.visayas{color:#ea580c}.popup-region.mindanao{color:#dc2626}
+.popup-title{font-family:'Fredoka One',cursive;font-size:22px;color:var(--text-dark);margin-bottom:3px;}
+.popup-topic{font-size:13px;color:var(--text-mid);margin-bottom:10px;}
+.popup-diff{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:999px;font-size:12px;font-weight:800;margin-bottom:14px;}
+.popup-diff.easy{background:#dcfce7;color:#15803d}.popup-diff.normal{background:#fef3c7;color:#92400e}.popup-diff.hard{background:#fee2e2;color:#991b1b}
+.popup-stars-row{display:flex;gap:8px;justify-content:center;margin-bottom:14px;}
+.pstar{width:30px;height:30px;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.pstar.earned{background:var(--gold);filter:drop-shadow(0 2px 4px rgba(252,209,22,.5))}.pstar.empty{background:#e5e7eb}
+.popup-best{font-size:13px;color:var(--text-mid);text-align:center;margin-bottom:14px;}
+.popup-best strong{color:var(--blue)}
+.popup-actions{display:flex;gap:10px;}
+.popup-actions .btn-play{flex:1;font-size:18px;padding:13px}
+.popup-close{padding:12px 18px;background:rgba(0,0,0,.06);border:none;border-radius:50px;font-size:13px;font-weight:800;color:var(--text-mid);cursor:pointer;}
+.popup-locked-msg{text-align:center;padding:12px;background:var(--wrong-bg);border-radius:12px;font-size:13px;color:var(--wrong);font-weight:700;}
 
-.cat-card{
-  display:flex;align-items:center;gap:14px;padding:14px 16px;
-  background:#fff;border-radius:16px;border:1.5px solid #f0ebe0;
-  cursor:pointer;transition:all 0.2s;position:relative;overflow:hidden;
-}
-.cat-card::before{
-  content:'';position:absolute;left:0;top:0;bottom:0;width:4px;
-  border-radius:4px 0 0 4px;background:var(--blue);
-  transform:scaleY(0);transition:transform 0.2s;transform-origin:bottom;
-}
-.cat-card:active{transform:scale(0.975) translateX(2px);border-color:var(--blue);
-  box-shadow:var(--shadow-blue)}
-.cat-card:active::before{transform:scaleY(1)}
-
-.cat-icon{
-  width:48px;height:48px;border-radius:12px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:26px;flex-shrink:0;
-  box-shadow:0 2px 8px rgba(0,0,0,0.08);
-}
-.cat-info{flex:1;min-width:0}
-.cat-name{font-family:'Fredoka One',cursive;font-size:16px;color:var(--text-dark);letter-spacing:0.3px}
-.cat-count{font-size:12px;color:var(--text-light);margin-top:1px}
-
-.cat-meta{display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0}
-.cat-best{
-  font-size:11px;font-weight:800;color:var(--gold-dark);
-  background:linear-gradient(135deg,var(--cream),var(--cream2));
-  padding:3px 9px;border-radius:8px;
-  border:1px solid rgba(252,209,22,0.3);
-}
-.cat-stars-mini{display:flex;gap:2px}
-.csm{width:10px;height:10px;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
-.csm.on{background:var(--gold)}
-.csm.off{background:#ddd}
-
-.cat-chevron{color:#ccc;font-size:18px;flex-shrink:0;margin-left:4px}
-
-/* ===== QUIZ SCREEN ===== */
-#quiz .header-bar{
-  padding:10px 16px 10px;
-  display:flex;justify-content:space-between;align-items:center;
-}
-.quiz-cat-label{
-  font-size:13px;color:rgba(255,255,255,0.9);font-weight:700;
-  display:flex;align-items:center;gap:6px;
-}
-.quiz-score-pill{
-  font-family:'Fredoka One',cursive;font-size:16px;
-  color:var(--gold);
-  background:rgba(0,0,0,0.2);
-  padding:5px 14px;border-radius:20px;
-  border:1px solid rgba(252,209,22,0.3);
-}
-
-/* Progress bar */
-.q-progress-bar{
-  height:3px;background:rgba(255,255,255,0.1);flex-shrink:0;position:relative;
-}
-.q-progress-fill{
-  height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));
-  transition:width 0.4s cubic-bezier(0.4,0,0.2,1);
-  border-radius:0 2px 2px 0;
-}
-
-/* Timer bar */
-.timer-track{height:5px;background:#eee;flex-shrink:0;position:relative;overflow:hidden}
-.timer-fill{
-  height:100%;
-  background:linear-gradient(90deg,var(--gold),#ffe55a);
-  transition:width 0.25s linear;border-radius:0 3px 3px 0;
-}
-.timer-fill.warning{
-  background:linear-gradient(90deg,var(--red),var(--red-light));
-  animation:timerPulse 0.5s ease-in-out infinite;
-}
-@keyframes timerPulse{0%,100%{opacity:1}50%{opacity:0.7}}
-
-.quiz-body{padding:18px 18px 14px;flex:1;display:flex;flex-direction:column;gap:0}
-
-.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-.q-num{
-  font-size:11px;color:var(--text-light);font-weight:800;letter-spacing:1px;text-transform:uppercase;
-}
-.q-timer-num{
-  font-family:'Fredoka One',cursive;font-size:18px;color:var(--blue);
-  transition:color 0.3s;
-}
+/* ===== QUIZ ===== */
+#quiz .header-bar{padding:10px 16px;display:flex;justify-content:space-between;align-items:center;}
+.quiz-cat-label{font-size:12px;color:rgba(255,255,255,.85);font-weight:700;max-width:60%;}
+.quiz-score-pill{font-family:'Fredoka One',cursive;font-size:16px;color:var(--gold);background:rgba(0,0,0,.2);padding:5px 14px;border-radius:20px;border:1px solid rgba(252,209,22,.3);}
+.q-progress-bar{height:3px;background:rgba(255,255,255,.1);flex-shrink:0;}
+.q-progress-fill{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-light));transition:width .4s cubic-bezier(.4,0,.2,1);border-radius:0 2px 2px 0;}
+.timer-track{height:5px;background:#eee;flex-shrink:0;}
+.timer-fill{height:100%;background:linear-gradient(90deg,var(--gold),#ffe55a);transition:width .25s linear;border-radius:0 3px 3px 0;}
+.timer-fill.warning{background:linear-gradient(90deg,var(--red),var(--red-light));animation:timerPulse .5s ease-in-out infinite;}
+@keyframes timerPulse{0%,100%{opacity:1}50%{opacity:.7}}
+.streak-bar{display:flex;align-items:center;justify-content:center;gap:6px;padding:5px 12px;background:rgba(252,209,22,.06);border-bottom:1px solid rgba(252,209,22,.12);font-size:12px;font-weight:800;color:var(--gold-dark);min-height:30px;flex-shrink:0;}
+.streak-dot{width:9px;height:9px;border-radius:50%;background:#e5e7eb;transition:all .3s;}
+.streak-dot.lit{background:var(--gold);box-shadow:0 0 8px rgba(252,209,22,.6);animation:litPop .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes litPop{from{transform:scale(.5)}to{transform:scale(1)}}
+.diff-badge{display:inline-block;padding:2px 10px;border-radius:999px;font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.diff-badge.easy{background:#dcfce7;color:#15803d}.diff-badge.normal{background:#fef3c7;color:#92400e}.diff-badge.hard{background:#fee2e2;color:#991b1b}
+.quiz-body{padding:16px 18px 12px;flex:1;display:flex;flex-direction:column;}
+.q-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.q-num{font-size:11px;color:var(--text-light);font-weight:800;letter-spacing:1px;text-transform:uppercase;}
+.q-timer-num{font-family:'Fredoka One',cursive;font-size:18px;color:var(--blue);transition:color .3s;}
 .q-timer-num.warning{color:var(--red)}
-
-.q-text{
-  font-family:'Fredoka One',cursive;font-size:20px;font-weight:400;
-  color:var(--text-dark);line-height:1.45;margin-bottom:16px;
-}
-
-.answers{display:flex;flex-direction:column;gap:9px}
-.answer-btn{
-  width:100%;padding:13px 16px;border-radius:14px;
-  border:2px solid #e8e4d8;
-  background:#fff;
-  font-family:'Nunito',sans-serif;font-size:13.5px;font-weight:700;
-  color:var(--text-dark);cursor:pointer;text-align:left;
-  transition:all 0.18s;position:relative;display:flex;align-items:center;gap:10px;
-  box-shadow:0 2px 4px rgba(0,0,0,0.04);
-}
-.answer-letter{
-  width:26px;height:26px;border-radius:8px;
-  background:rgba(0,56,168,0.08);color:var(--blue);
-  display:flex;align-items:center;justify-content:center;
-  font-size:12px;font-weight:900;flex-shrink:0;
-  transition:all 0.18s;
-}
-.answer-btn:hover:not(.disabled){
-  border-color:var(--blue);
-  transform:translateX(3px);
-  box-shadow:0 4px 12px rgba(0,56,168,0.12);
-}
-.answer-btn:hover:not(.disabled) .answer-letter{
-  background:var(--blue);color:#fff;
-}
-.answer-btn:active:not(.disabled){transform:scale(0.98) translateX(2px)}
-
-.answer-btn.correct{
-  border-color:var(--success);background:var(--success-bg);color:#15803d;
-}
-.answer-btn.correct .answer-letter{background:var(--success);color:#fff}
-.answer-status{
-  position:absolute;right:14px;font-size:18px;
-  animation:popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
-
-.answer-btn.wrong{
-  border-color:var(--wrong);background:var(--wrong-bg);color:var(--red-dark);
-}
+.q-text{font-family:'Fredoka One',cursive;font-size:19px;color:var(--text-dark);line-height:1.45;margin-bottom:14px;}
+.answers{display:flex;flex-direction:column;gap:8px}
+.answer-btn{width:100%;padding:12px 16px;border-radius:14px;border:2px solid #e8e4d8;background:#fff;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:var(--text-dark);cursor:pointer;text-align:left;transition:all .18s;position:relative;display:flex;align-items:center;gap:10px;box-shadow:0 2px 4px rgba(0,0,0,.04);}
+.answer-letter{width:26px;height:26px;border-radius:8px;background:rgba(0,56,168,.08);color:var(--blue);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:900;flex-shrink:0;transition:all .18s;}
+.answer-btn:hover:not(.disabled){border-color:var(--blue);transform:translateX(3px);box-shadow:0 4px 12px rgba(0,56,168,.12);}
+.answer-btn:hover:not(.disabled) .answer-letter{background:var(--blue);color:#fff;}
+.answer-btn.correct{border-color:var(--green-light);background:var(--green-bg);color:#15803d;}
+.answer-btn.correct .answer-letter{background:var(--green-light);color:#fff}
+.answer-btn.wrong{border-color:var(--wrong);background:var(--wrong-bg);color:var(--red-dark);}
 .answer-btn.wrong .answer-letter{background:var(--wrong);color:#fff}
-.answer-btn.disabled{pointer-events:none;opacity:0.55;transform:none!important}
+.answer-btn.disabled{pointer-events:none;opacity:.55;transform:none!important}
 .answer-btn.disabled.correct,.answer-btn.disabled.wrong{opacity:1}
-
-.explanation-box{
-  margin-top:12px;padding:12px 14px;
-  background:linear-gradient(135deg,#f0fdf4,#dcfce7);
-  border:1.5px solid rgba(34,197,94,0.3);
-  border-radius:12px;
-  font-size:13px;color:#15803d;line-height:1.55;
-  animation:slideDown 0.3s cubic-bezier(0.34,1.2,0.64,1);
-}
-.explanation-box.timeout-exp{
-  background:linear-gradient(135deg,#fff7ed,#ffedd5);
-  border-color:rgba(249,115,22,0.3);color:#9a3412;
-}
+.answer-status{position:absolute;right:14px;font-size:18px;animation:popIn .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes popIn{from{transform:scale(0)}to{transform:scale(1)}}
+.explanation-box{margin-top:10px;padding:11px 13px;background:linear-gradient(135deg,#f0fdf4,#dcfce7);border:1.5px solid rgba(34,197,94,.3);border-radius:12px;font-size:12px;color:#15803d;line-height:1.55;animation:slideDown .3s ease;}
+.explanation-box.timeout-exp{background:linear-gradient(135deg,#fff7ed,#ffedd5);border-color:rgba(249,115,22,.3);color:#9a3412;}
 @keyframes slideDown{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
-
-.next-btn{
-  margin-top:auto;padding:14px;
-  background:linear-gradient(135deg,var(--blue-light),var(--blue));
-  color:#fff;border:none;border-radius:14px;
-  font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;
-  transition:all 0.15s;
-  box-shadow:0 4px 0 var(--blue-dark),var(--shadow-blue);
-  letter-spacing:0.5px;
-}
+.next-btn{margin-top:auto;padding:14px;background:linear-gradient(135deg,var(--blue-light),var(--blue));color:#fff;border:none;border-radius:14px;font-family:'Fredoka One',cursive;font-size:17px;cursor:pointer;transition:all .15s;box-shadow:0 4px 0 var(--blue-dark);}
 .next-btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--blue-dark)}
+.score-popup{position:absolute;z-index:100;font-family:'Fredoka One',cursive;font-size:22px;color:var(--green-light);pointer-events:none;animation:floatUp .8s ease-out forwards;}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0) scale(1)}100%{opacity:0;transform:translateY(-50px) scale(1.2)}}
 
 /* ===== RESULTS ===== */
-#results .header-bar{padding:22px 20px 18px;text-align:center}
-.results-title{
-  font-family:'Fredoka One',cursive;font-size:28px;color:var(--gold);
-  text-shadow:0 2px 8px rgba(252,209,22,0.3);
-}
-.results-sub{font-size:12px;color:rgba(255,255,255,0.75);margin-top:3px;letter-spacing:1px}
-
-.results-body{padding:22px 20px;display:flex;flex-direction:column;align-items:center;gap:14px}
-
-.score-circle{
-  width:148px;height:148px;border-radius:50%;
-  background:linear-gradient(150deg,var(--blue-light),var(--blue),var(--blue-dark));
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  box-shadow:0 0 0 6px rgba(0,56,168,0.15),var(--shadow-blue);
-  animation:scaleIn 0.55s cubic-bezier(0.34,1.56,0.64,1);
-  position:relative;overflow:hidden;
-}
-.score-circle::before{
-  content:'';position:absolute;inset:0;
-  background:radial-gradient(circle at 40% 35%,rgba(255,255,255,0.15),transparent 60%);
-}
-@keyframes scaleIn{from{transform:scale(0.3);opacity:0}to{transform:scale(1);opacity:1}}
-.score-num{
-  font-family:'Fredoka One',cursive;font-size:46px;color:var(--gold);
-  text-shadow:0 2px 0 var(--gold-dark),0 4px 16px rgba(252,209,22,0.5);
-  position:relative;z-index:1;
-}
-.score-label{font-size:12px;color:rgba(255,255,255,0.75);margin-top:-4px;letter-spacing:1px;z-index:1}
-
-.result-stars{display:flex;gap:10px;margin-top:2px}
-.rstar{
-  width:38px;height:38px;
-  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
-  transition:all 0.4s;
-}
-.rstar.earned{
-  background:linear-gradient(135deg,var(--gold-light),var(--gold));
-  animation:starPop 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
-  filter:drop-shadow(0 2px 8px rgba(252,209,22,0.5));
-}
+#results .header-bar{padding:22px 20px 18px;text-align:center;}
+.results-title{font-family:'Fredoka One',cursive;font-size:26px;color:var(--gold);}
+.results-sub{font-size:12px;color:rgba(255,255,255,.75);margin-top:3px;letter-spacing:1px}
+.results-body{padding:18px 20px;display:flex;flex-direction:column;align-items:center;gap:12px}
+.score-circle{width:138px;height:138px;border-radius:50%;background:linear-gradient(150deg,var(--blue-light),var(--blue),var(--blue-dark));display:flex;flex-direction:column;align-items:center;justify-content:center;box-shadow:0 0 0 6px rgba(0,56,168,.15);animation:scaleIn .55s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden;}
+.score-circle::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 40% 35%,rgba(255,255,255,.15),transparent 60%);}
+@keyframes scaleIn{from{transform:scale(.3);opacity:0}to{transform:scale(1);opacity:1}}
+.score-num{font-family:'Fredoka One',cursive;font-size:44px;color:var(--gold);text-shadow:0 2px 0 var(--gold-dark);position:relative;z-index:1;}
+.score-label{font-size:11px;color:rgba(255,255,255,.7);margin-top:-4px;letter-spacing:1px;z-index:1}
+.result-stars{display:flex;gap:10px;}
+.rstar{width:34px;height:34px;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.rstar.earned{background:linear-gradient(135deg,var(--gold-light),var(--gold));animation:starPop .5s cubic-bezier(.34,1.56,.64,1) both;filter:drop-shadow(0 2px 8px rgba(252,209,22,.5));}
 .rstar.empty{background:#e5e7eb}
-@keyframes starPop{
-  0%{transform:scale(0) rotate(-30deg)}
-  60%{transform:scale(1.3) rotate(5deg)}
-  100%{transform:scale(1) rotate(0deg)}
-}
+@keyframes starPop{0%{transform:scale(0) rotate(-30deg)}60%{transform:scale(1.3) rotate(5deg)}100%{transform:scale(1) rotate(0)}}
+.best-badge{background:linear-gradient(135deg,var(--gold),var(--gold-light));color:var(--blue-dark);font-weight:900;font-size:13px;padding:8px 20px;border-radius:999px;display:flex;align-items:center;gap:6px;}
+.xp-gain{background:linear-gradient(135deg,var(--blue),var(--blue-light));color:#fff;font-weight:900;font-size:13px;padding:8px 20px;border-radius:999px;display:flex;align-items:center;gap:6px;animation:slideDown .4s .1s ease both;}
+.result-stats{width:100%;background:linear-gradient(135deg,var(--cream),var(--cream2));border:1.5px solid rgba(252,209,22,.2);border-radius:16px;padding:14px;display:flex;justify-content:space-around;text-align:center;}
+.stat-item .stat-val{font-family:'Fredoka One',cursive;font-size:24px;color:var(--blue);}
+.stat-item .stat-lbl{font-size:10px;color:var(--text-mid);margin-top:1px;font-weight:700;letter-spacing:.5px}
+.rank-up-banner{width:100%;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;border-radius:14px;padding:14px;text-align:center;animation:scaleIn .4s .2s ease both;}
+.rank-up-banner .ru-title{font-family:'Fredoka One',cursive;font-size:19px;color:var(--gold)}
+.rank-up-banner .ru-sub{font-size:12px;color:rgba(255,255,255,.85);margin-top:2px}
+.result-msg{font-family:'Fredoka One',cursive;font-size:16px;color:var(--text-dark);text-align:center;line-height:1.4;}
+.result-submsg{font-size:12px;color:var(--text-mid);text-align:center;line-height:1.55;margin-top:-6px;}
+.result-actions{display:flex;flex-direction:column;gap:9px;width:100%;}
+.result-actions .btn-play,.result-actions .btn-secondary{width:100%;text-align:center}
 
-.best-badge{
-  background:linear-gradient(135deg,var(--gold),var(--gold-light));
-  color:var(--blue-dark);font-weight:900;font-size:13px;
-  padding:9px 20px;border-radius:999px;
-  box-shadow:var(--shadow-gold);
-  animation:slideDown 0.4s cubic-bezier(0.34,1.2,0.64,1);
-  display:flex;align-items:center;gap:6px;
-}
+/* ===== LEADERBOARD ===== */
+#leaderboard .header-bar{padding:16px 20px;}
+.lb-title{font-family:'Fredoka One',cursive;font-size:20px;color:var(--gold)}
+.lb-subtitle{font-size:11px;color:rgba(255,255,255,.7);margin-top:1px}
+.lb-body{padding:16px}
+.lb-section-title{font-family:'Fredoka One',cursive;font-size:15px;color:var(--text-dark);margin-bottom:10px;}
+.lb-row{display:flex;align-items:center;gap:12px;padding:12px 14px;background:#fff;border-radius:14px;margin-bottom:8px;border:1.5px solid #f0ebe0;}
+.lb-rank-num{font-family:'Fredoka One',cursive;font-size:20px;width:28px;text-align:center;}
+.lb-rank-num.gold{color:var(--gold-dark)}.lb-rank-num.silver{color:#9ca3af}.lb-rank-num.bronze{color:#b45309}
+.lb-info{flex:1}.lb-name{font-weight:800;font-size:14px;color:var(--text-dark)}.lb-detail{font-size:11px;color:var(--text-light);margin-top:1px}
+.lb-score{font-family:'Fredoka One',cursive;font-size:18px;color:var(--blue)}
+.lb-you{border-color:var(--blue);background:linear-gradient(135deg,#eff6ff,#dbeafe);}
 
-.result-stats{
-  width:100%;
-  background:linear-gradient(135deg,var(--cream),var(--cream2));
-  border:1.5px solid rgba(252,209,22,0.2);
-  border-radius:16px;padding:16px;
-  display:flex;justify-content:space-around;text-align:center;
-}
-.stat-item .stat-val{
-  font-family:'Fredoka One',cursive;font-size:26px;color:var(--blue);
-}
-.stat-item .stat-lbl{font-size:11px;color:var(--text-mid);margin-top:1px;font-weight:700;letter-spacing:0.5px}
+/* Unlock overlay */
+.unlock-overlay{position:absolute;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:200;animation:fadeIn .3s ease;}
+.unlock-card{background:var(--white);border-radius:24px;padding:28px 26px;text-align:center;max-width:290px;animation:scaleIn .5s cubic-bezier(.34,1.56,.64,1);}
+.unlock-emoji{font-size:46px;margin-bottom:8px;display:block;}
+.unlock-title{font-family:'Fredoka One',cursive;font-size:22px;color:var(--blue);margin-bottom:4px;}
+.unlock-sub{font-size:13px;color:var(--text-mid);line-height:1.5;margin-bottom:18px;}
+.unlock-card .btn-play{max-width:190px;margin:0 auto;font-size:17px;padding:12px}
 
-.result-msg{
-  font-family:'Fredoka One',cursive;font-size:18px;color:var(--text-dark);
-  text-align:center;line-height:1.4;
-}
-.result-submsg{
-  font-size:13px;color:var(--text-mid);text-align:center;line-height:1.55;margin-top:-6px;
-}
-.result-actions{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:4px}
-.result-actions .btn-play{max-width:100%;width:100%}
-.result-actions .btn-secondary{max-width:100%;width:100%;text-align:center}
-
-/* ===== SCORE POPUP ===== */
-.score-popup{
-  position:absolute;z-index:100;
-  font-family:'Fredoka One',cursive;font-size:22px;color:var(--success);
-  pointer-events:none;
-  animation:floatUp 0.8s ease-out forwards;
-  text-shadow:0 2px 8px rgba(34,197,94,0.4);
-}
-@keyframes floatUp{
-  0%{opacity:1;transform:translateY(0) scale(1)}
-  100%{opacity:0;transform:translateY(-50px) scale(1.2)}
-}
-
-/* ===== AD BANNER ===== */
-.ad-banner{
-  flex-shrink:0;height:50px;
-  background:linear-gradient(135deg,#f9f5ee,#f5f0e4);
-  display:flex;align-items:center;justify-content:center;
-  font-size:10px;color:#bba880;
-  border-top:1px solid #e8e4d8;letter-spacing:1px;font-weight:700;text-transform:uppercase;
-}
-
-/* ===== COMBO / STREAK ===== */
-.streak-bar{
-  display:flex;align-items:center;justify-content:center;
-  gap:6px;padding:6px 12px;
-  background:linear-gradient(135deg,rgba(252,209,22,0.1),rgba(252,209,22,0.05));
-  border-bottom:1px solid rgba(252,209,22,0.15);
-  font-size:12px;font-weight:800;color:var(--gold-dark);
-  min-height:32px;flex-shrink:0;
-}
-.streak-dot{
-  width:10px;height:10px;border-radius:50%;background:#e5e7eb;
-  transition:all 0.3s;
-}
-.streak-dot.lit{
-  background:var(--gold);
-  box-shadow:0 0 8px rgba(252,209,22,0.6);
-  animation:litPop 0.3s cubic-bezier(0.34,1.56,0.64,1);
-}
-@keyframes litPop{from{transform:scale(0.5)}to{transform:scale(1)}}
-
-/* ===== ANIMATIONS ===== */
-.fade-in{animation:fadeIn 0.3s ease}
+.fade-in{animation:fadeIn .3s ease}
 @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.slide-up{animation:slideUp 0.35s ease both}
+.slide-up{animation:slideUp .35s ease both}
 @keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-/* ===== RESPONSIVE ===== */
-@media(max-height:680px){
-  .sun-badge{margin:10px auto 8px;width:64px;height:64px}
-  .sun-core{width:44px;height:44px;font-size:16px}
-  .sun-ray-ring{width:64px;height:64px}
-  .sray{left:30.5px;transform-origin:center 32px}
-  .menu-body{padding:12px 20px;gap:9px}
-  #menu .header-bar{padding:16px 20px 14px}
-  .menu-title{font-size:30px}
-}
+@media(max-height:680px){.menu-body{padding:10px 20px;gap:8px}.sun-badge{margin:8px auto 10px;width:60px;height:60px}.sun-core{width:42px;height:42px;font-size:16px}.sun-ray-ring{width:60px;height:60px}.sray{left:28.5px;transform-origin:center 30px}}
 </style>
 </head>
 <body>
 <div id="app">
-  <div id="offlineBanner" class="offline-banner">⚡ Offline mode — cached content available</div>
+  <div id="offlineBanner" class="offline-banner">Offline mode — cached content available</div>
 
-  <!-- ===== MAIN MENU ===== -->
+  <!-- MENU -->
   <div id="menu" class="screen active">
     <div class="header-bar">
-      <div class="menu-flag-strip">
-        <div class="mfs-blue"></div><div class="mfs-red"></div>
-        <div class="mfs-white"></div><div class="mfs-gold"></div>
-      </div>
-      <div class="menu-stars">
-        <div class="menu-star"></div>
-        <div class="menu-star"></div>
-        <div class="menu-star"></div>
-      </div>
+      <div class="menu-stars"><div class="menu-star"></div><div class="menu-star"></div><div class="menu-star"></div></div>
       <div class="menu-title">Alam Mo Ba?!</div>
-      <div class="menu-subtitle">PINOY TRIVIA QUIZ</div>
+      <div class="menu-subtitle">PINOY TRIVIA QUEST</div>
     </div>
     <div class="scroll-area">
       <div class="menu-body">
         <div class="sun-badge">
           <div class="sun-ray-ring">
-            <div class="sray" style="transform:rotate(0deg)"></div>
-            <div class="sray" style="transform:rotate(45deg)"></div>
-            <div class="sray" style="transform:rotate(90deg)"></div>
-            <div class="sray" style="transform:rotate(135deg)"></div>
-            <div class="sray" style="transform:rotate(180deg)"></div>
-            <div class="sray" style="transform:rotate(225deg)"></div>
-            <div class="sray" style="transform:rotate(270deg)"></div>
-            <div class="sray" style="transform:rotate(315deg)"></div>
+            <div class="sray" style="transform:rotate(0deg)"></div><div class="sray" style="transform:rotate(45deg)"></div>
+            <div class="sray" style="transform:rotate(90deg)"></div><div class="sray" style="transform:rotate(135deg)"></div>
+            <div class="sray" style="transform:rotate(180deg)"></div><div class="sray" style="transform:rotate(225deg)"></div>
+            <div class="sray" style="transform:rotate(270deg)"></div><div class="sray" style="transform:rotate(315deg)"></div>
           </div>
           <div class="sun-core">?!</div>
         </div>
-
-        <div class="highscore-badge">
-          <span class="trophy">🏆</span>
-          Best: <span id="globalBest">0</span> pts
+        <div class="xp-card">
+          <div class="xp-top"><div class="xp-rank" id="menuRankLabel">Magsasaka</div><div class="xp-pts" id="menuXpPts">0 / 200 XP</div></div>
+          <div class="xp-bar-track"><div class="xp-bar-fill" id="menuXpBar" style="width:0%"></div></div>
+          <div class="xp-bar-label" id="menuXpBarLabel">0 XP total</div>
         </div>
-
-        <button class="btn-play" onclick="playClickSound(); showScreen('categories')">LARO NA!</button>
-
+        <div class="highscore-badge">Best: <span id="globalBest">0</span> pts</div>
+        <button class="btn-play" onclick="playClickSound();showScreen('mapscreen')">SIMULAN ANG QUEST!</button>
         <div class="settings-row">
-          <button id="soundToggle" class="toggle-btn active" onclick="toggleSound()">🔊 Sound</button>
+          <button id="soundToggle" class="toggle-btn active" onclick="toggleSound()">Sound ON</button>
+          <button class="toggle-btn" onclick="playClickSound();showScreen('leaderboard')">Leaderboard</button>
         </div>
-        <button class="btn-secondary" style="font-size:12px;padding:9px" onclick="resetScores()">↺ Reset Scores</button>
+        <button class="btn-secondary" style="font-size:12px;padding:9px" onclick="resetAll()">Reset All Progress</button>
       </div>
     </div>
-    <div class="menu-footer">
-      Alam Mo Ba?! v1.0 — Mabuhay! 🇵🇭<br>
-      <a href="privacy.html" target="_blank">Privacy Policy</a>
-    </div>
+    <div class="menu-footer">Alam Mo Ba?! v2.0 — Mabuhay! 🇵🇭<br><a href="privacy.html" target="_blank">Privacy Policy</a></div>
     <div class="ad-banner">[ Ad Space — Banner Ad ]</div>
   </div>
 
-  <!-- ===== CATEGORY SELECT ===== -->
-  <div id="categories" class="screen">
+  <!-- MAP -->
+  <div id="mapscreen" class="screen">
     <div class="header-bar">
-      <div class="cat-header-inner">
-        <div class="cat-header-title">Piliin ang Category</div>
-        <div class="cat-header-sub">Choose your challenge!</div>
+      <div><div class="map-title">Philippines Quest</div><div class="map-subtitle" id="mapProgressLabel">0 / 20 levels done</div></div>
+      <div class="map-xp-pill"><div class="rank-label" id="mapRankLabel">Magsasaka</div><div class="xp-label" id="mapXpLabel">0 XP</div></div>
+    </div>
+    <div class="map-container">
+      <div class="map-scroll" id="mapScroll">
+        <div id="mapInner" style="min-height:1500px;"></div>
       </div>
     </div>
-    <div class="scroll-area">
-      <div class="cat-grid" id="catGrid"></div>
-      <div style="padding:0 14px 14px">
-        <button class="btn-secondary" style="width:100%;text-align:center" onclick="playClickSound(); showScreen('menu')">← Bumalik sa Menu</button>
-        <p style="text-align:center;font-size:11px;margin-top:10px;color:var(--text-light)">
-          <a href="privacy.html" target="_blank" style="color:var(--text-light)">Privacy Policy</a>
-        </p>
-      </div>
+    <div style="padding:10px 14px;flex-shrink:0;background:var(--white);border-top:1px solid #f0ebe0;">
+      <button class="btn-secondary" style="padding:10px;font-size:13px" onclick="playClickSound();showScreen('menu')">← Main Menu</button>
     </div>
-    <div class="ad-banner">[ Ad Space — Banner Ad ]</div>
   </div>
 
-  <!-- ===== QUIZ ===== -->
+  <!-- QUIZ -->
   <div id="quiz" class="screen">
-    <div class="header-bar" id="quizHeader">
+    <div class="header-bar">
       <div class="quiz-cat-label" id="quizCatLabel"></div>
-      <div class="quiz-score-pill">⭐ <span id="quizScore">0</span></div>
+      <div class="quiz-score-pill">★ <span id="quizScore">0</span></div>
     </div>
     <div class="q-progress-bar"><div class="q-progress-fill" id="qProgressFill"></div></div>
     <div class="timer-track"><div class="timer-fill" id="timerFill"></div></div>
     <div class="streak-bar" id="streakBar"></div>
-    <div class="scroll-area">
-      <div class="quiz-body" id="quizBody"></div>
-    </div>
+    <div class="scroll-area"><div class="quiz-body" id="quizBody"></div></div>
   </div>
 
-  <!-- ===== RESULTS ===== -->
+  <!-- RESULTS -->
   <div id="results" class="screen">
     <div class="header-bar">
       <div class="results-title" id="resultsTitle">Results!</div>
       <div class="results-sub" id="resultsCatLabel"></div>
     </div>
-    <div class="scroll-area">
-      <div class="results-body" id="resultsBody"></div>
+    <div class="scroll-area"><div class="results-body" id="resultsBody"></div></div>
+    <p style="text-align:center;font-size:11px;padding:5px 0;color:var(--text-light)"><a href="privacy.html" target="_blank" style="color:var(--text-light)">Privacy Policy</a></p>
+    <div class="ad-banner">[ Ad Space — Interstitial Ad ]</div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div id="leaderboard" class="screen">
+    <div class="header-bar"><div class="lb-title">Leaderboard</div><div class="lb-subtitle">Top Pinoy Trivia Masters</div></div>
+    <div class="scroll-area"><div class="lb-body" id="lbBody"></div></div>
+    <div style="padding:10px 14px;flex-shrink:0">
+      <button class="btn-secondary" style="padding:10px;font-size:13px" onclick="playClickSound();showScreen('menu')">← Bumalik</button>
     </div>
-    <p style="text-align:center;font-size:11px;padding:6px 0;color:var(--text-light)">
-      <a href="privacy.html" target="_blank" style="color:var(--text-light)">Privacy Policy</a>
-    </p>
-    <div class="ad-banner">[ Ad Space — Interstitial Ad Here ]</div>
+    <div class="ad-banner">[ Ad Space — Banner Ad ]</div>
   </div>
 </div>
 
 <script>
-// ===== QUIZ DATA =====
-const QUESTIONS = {
-  "Philippine History": {
-    icon: "📜", bg: "#EEF2FF",
-    questions: [
-      {q:"Sino ang tinaguriang 'Ama ng Wikang Filipino'?",o:["Jose Rizal","Andres Bonifacio","Manuel L. Quezon","Emilio Aguinaldo"],c:2,e:"Si Manuel L. Quezon ang naging advocate para sa pagkakaroon ng national language."},
-      {q:"Anong taon idineklara ang Philippine Independence mula sa Spain?",o:["1896","1898","1900","1901"],c:1,e:"June 12, 1898 sa Kawit, Cavite idineklara ni Aguinaldo ang kalayaan."},
-      {q:"What is the longest-running revolt in Philippine history?",o:["Dagohoy Revolt","Silang Revolt","Bankaw Revolt","Malong Revolt"],c:0,e:"The Dagohoy Revolt lasted 85 years (1744-1829) in Bohol."},
-      {q:"Sino ang sumulat ng 'Noli Me Tangere'?",o:["Marcelo H. del Pilar","Jose Rizal","Graciano Lopez Jaena","Apolinario Mabini"],c:1,e:"Isinulat ni Jose Rizal ang Noli Me Tangere noong 1887 sa Berlin, Germany."},
-      {q:"Ano ang dating pangalan ng Pilipinas noong panahon ng Kastila?",o:["Las Islas Filipinas","Pearl of the Orient","Maharlika","Luzviminda"],c:0,e:"Pinangalanan itong Las Islas Filipinas bilang tribute kay King Philip II ng Spain."},
-      {q:"Who was the first President of the Philippines?",o:["Manuel Quezon","Emilio Aguinaldo","Jose P. Laurel","Sergio Osmeña"],c:1,e:"Emilio Aguinaldo became the first president of the First Philippine Republic in 1899."},
-      {q:"Saan naganap ang Cry of Pugad Lawin?",o:["Cavite","Quezon City","Bulacan","Manila"],c:1,e:"Naganap ito sa kasalukuyang Quezon City noong August 1896."},
-      {q:"What was EDSA Revolution also known as?",o:["Yellow Revolution","Velvet Revolution","People Power Revolution","Freedom Revolution"],c:2,e:"The 1986 EDSA People Power Revolution peacefully ousted President Marcos."},
-      {q:"Sino ang 'Supremo' ng Katipunan?",o:["Jose Rizal","Andres Bonifacio","Emilio Aguinaldo","Apolinario Mabini"],c:1,e:"Si Andres Bonifacio ang naging Supremo o pinakamataas na pinuno ng KKK."},
-      {q:"Anong taon naging Commonwealth ang Pilipinas?",o:["1935","1942","1946","1898"],c:0,e:"Ang Philippine Commonwealth ay naitatag noong November 15, 1935."}
+// ============================================================
+// LEVEL MAP DATA
+// ============================================================
+const LEVELS=[
+  {id:1,name:"Batanes",region:"luzon",topic:"history",diff:"easy",icon:"📜",x:52,y:3},
+  {id:2,name:"Ilocos Norte",region:"luzon",topic:"food",diff:"easy",icon:"🍛",x:30,y:8},
+  {id:3,name:"Cagayan Valley",region:"luzon",topic:"culture",diff:"easy",icon:"🎭",x:65,y:12},
+  {id:4,name:"Cordillera",region:"luzon",topic:"geo",diff:"easy",icon:"⛰️",x:42,y:17},
+  {id:5,name:"Pampanga",region:"luzon",topic:"popculture",diff:"easy",icon:"🎬",x:55,y:22},
+  {id:6,name:"Metro Manila",region:"luzon",topic:"history",diff:"easy",icon:"🏙️",x:57,y:27},
+  {id:7,name:"Cavite",region:"luzon",topic:"food",diff:"easy",icon:"🍲",x:48,y:31},
+  {id:8,name:"Quezon",region:"luzon",topic:"culture",diff:"normal",icon:"🌺",x:65,y:36},
+  {id:9,name:"Palawan",region:"visayas",topic:"geo",diff:"normal",icon:"🏝️",x:28,y:44},
+  {id:10,name:"Cebu",region:"visayas",topic:"popculture",diff:"normal",icon:"🎪",x:64,y:48},
+  {id:11,name:"Bohol",region:"visayas",topic:"history",diff:"normal",icon:"🦎",x:70,y:53},
+  {id:12,name:"Leyte",region:"visayas",topic:"food",diff:"normal",icon:"🌴",x:76,y:57},
+  {id:13,name:"Iloilo",region:"visayas",topic:"culture",diff:"normal",icon:"🎭",x:46,y:61},
+  {id:14,name:"Negros",region:"visayas",topic:"geo",diff:"hard",icon:"🏔️",x:56,y:66},
+  {id:15,name:"Zamboanga",region:"mindanao",topic:"popculture",diff:"hard",icon:"🎨",x:32,y:73},
+  {id:16,name:"Misamis",region:"mindanao",topic:"history",diff:"hard",icon:"📜",x:64,y:76},
+  {id:17,name:"Bukidnon",region:"mindanao",topic:"food",diff:"hard",icon:"🍽️",x:56,y:81},
+  {id:18,name:"Davao",region:"mindanao",topic:"culture",diff:"hard",icon:"🦅",x:70,y:85},
+  {id:19,name:"South Cotabato",region:"mindanao",topic:"geo",diff:"hard",icon:"🌋",x:50,y:90},
+  {id:20,name:"Tawi-Tawi",region:"mindanao",topic:"popculture",diff:"hard",icon:"👑",x:38,y:95},
+];
+
+// ============================================================
+// QUESTION BANK
+// ============================================================
+const QB={
+  history:{
+    easy:[
+      {q:"Sino ang sumulat ng Noli Me Tangere?",o:["Marcelo del Pilar","Jose Rizal","Andres Bonifacio","Apolinario Mabini"],c:1,e:"Isinulat ni Jose Rizal ang Noli Me Tangere noong 1887 sa Berlin."},
+      {q:"Anong taon idineklara ang kalayaan ng Pilipinas mula sa Spain?",o:["1896","1898","1900","1901"],c:1,e:"June 12, 1898 sa Kawit, Cavite — araw ng kalayaan!"},
+      {q:"Sino ang Supremo ng Katipunan?",o:["Jose Rizal","Andres Bonifacio","Emilio Aguinaldo","Apolinario Mabini"],c:1,e:"Si Andres Bonifacio ang Supremo ng KKK."},
+      {q:"Who was the first President of the Philippines?",o:["Manuel Quezon","Emilio Aguinaldo","Jose P. Laurel","Sergio Osmena"],c:1,e:"Emilio Aguinaldo — first president of the First Philippine Republic in 1899."},
+      {q:"Sino ang Ama ng Wikang Filipino?",o:["Jose Rizal","Andres Bonifacio","Manuel L. Quezon","Emilio Aguinaldo"],c:2,e:"Si Manuel L. Quezon ang champion ng national language."},
+      {q:"Saan naganap ang Cry of Pugad Lawin?",o:["Cavite","Quezon City","Bulacan","Manila"],c:1,e:"Sa kasalukuyang Quezon City noong August 1896."},
+      {q:"Anong taon naging Commonwealth ang Pilipinas?",o:["1935","1942","1946","1898"],c:0,e:"November 15, 1935 — Philippine Commonwealth established."},
+      {q:"The EDSA Revolution is also known as?",o:["Yellow Revolution","Velvet Revolution","People Power Revolution","Freedom Revolution"],c:2,e:"The 1986 EDSA People Power Revolution peacefully ousted Marcos."},
+    ],
+    normal:[
+      {q:"What is the longest-running revolt in Philippine history?",o:["Dagohoy Revolt","Silang Revolt","Bankaw Revolt","Malong Revolt"],c:0,e:"Dagohoy Revolt — 85 years (1744-1829) in Bohol."},
+      {q:"Sino ang nagtatag ng La Liga Filipina?",o:["Andres Bonifacio","Jose Rizal","Marcelo del Pilar","Graciano Lopez Jaena"],c:1,e:"Itinatag ni Rizal ang La Liga Filipina noong 1892 sa Manila."},
+      {q:"What treaty ended Spanish rule in the Philippines?",o:["Treaty of Manila","Treaty of Paris","Treaty of Berlin","Treaty of Madrid"],c:1,e:"The Treaty of Paris (1898) transferred the Philippines to the US."},
+      {q:"Sino ang Utak ng Katipunan?",o:["Andres Bonifacio","Emilio Jacinto","Pio Valenzuela","Macario Sakay"],c:1,e:"Si Emilio Jacinto ang tinaguriang Utak ng Katipunan."},
+      {q:"Saan isinilang si Jose Rizal?",o:["Manila","Batangas","Calamba, Laguna","Cavite"],c:2,e:"Si Jose Rizal ay ipinanganak sa Calamba, Laguna noong June 19, 1861."},
+    ],
+    hard:[
+      {q:"What was the Biak-na-Bato Republic?",o:["A government under Aguinaldo","A Katipunan faction","A Spanish fortress","A rebel stronghold in Bataan"],c:0,e:"The Biak-na-Bato Republic was established by Aguinaldo in 1897 in Bulacan."},
+      {q:"Who wrote the Philippine Declaration of Independence?",o:["Emilio Aguinaldo","Ambrosio Rianzares Bautista","Apolinario Mabini","Felipe Agoncillo"],c:1,e:"Ambrosio Rianzares Bautista drafted and read the Philippine Declaration of Independence."},
+      {q:"What does KKK stand for in the Katipunan full name?",o:["Kataastaasang Kilusan ng Kalayaan","Kataastaasang Kagalang-galangang Katipunan ng mga Anak ng Bayan","Kilusang Katipunero ng Katipunan","Kataas-taasang Katipunero"],c:1,e:"KKK = Kataastaasang Kagalang-galangang Katipunan ng mga Anak ng Bayan."},
+      {q:"Who was the last Filipino president of the Commonwealth?",o:["Manuel Quezon","Sergio Osmena","Jose P. Laurel","Elpidio Quirino"],c:1,e:"Sergio Osmena served as Commonwealth president after Quezon died in 1944."},
     ]
   },
-  "Filipino Food": {
-    icon: "🍛", bg: "#FFF5F5",
-    questions: [
-      {q:"Anong probinsya ang kilala bilang 'Sisig Capital of the Philippines'?",o:["Bulacan","Pampanga","Tarlac","Bataan"],c:1,e:"Ang Pampanga, lalo na ang Angeles City, ang kilala bilang sisig capital."},
-      {q:"What is the main ingredient of 'kare-kare'?",o:["Pork belly","Oxtail","Chicken","Fish"],c:1,e:"Kare-kare is traditionally made with oxtail in a thick peanut sauce."},
-      {q:"Saan nagmula ang 'lechon' na tradisyon?",o:["China","Spain","America","Japan"],c:1,e:"Ang lechon ay nagmula sa Spanish tradition ng roasting whole pigs."},
-      {q:"What Filipino dessert is made from purple yam?",o:["Leche flan","Ube halaya","Biko","Turon"],c:1,e:"Ube halaya is a sweet jam made from boiled and mashed purple yam."},
-      {q:"Ano ang tawag sa Filipino breakfast na may garlic rice, egg, at meat?",o:["Silog","Merienda","Pulutan","Handaan"],c:0,e:"Silog comes from 'sinangag' (garlic rice) + 'itlog' (egg)."},
-      {q:"Which region is known as the 'Bagnet Capital'?",o:["Cebu","Ilocos","Bicol","Davao"],c:1,e:"Bagnet is a crispy deep-fried pork belly dish from the Ilocos region."},
-      {q:"Ano ang pangunahing sangkap ng Bicol Express?",o:["Bagoong","Coconut milk at sili","Tamarind","Soy sauce"],c:1,e:"Bicol Express uses gata (coconut milk) and lots of sili (chili peppers)."},
-      {q:"What is 'balut'?",o:["Fried quail eggs","Fertilized duck egg","Salted egg","Boiled chicken egg"],c:1,e:"Balut is a fertilized developing duck egg boiled and eaten as street food."},
-      {q:"Saang parte ng Pilipinas famous ang 'pochero'?",o:["Visayas","Mindanao","Luzon","Palawan"],c:0,e:"Pochero is especially popular in the Visayas, particularly Cebu."},
-      {q:"Anong klaseng suka ang commonly ginagamit sa adobo?",o:["Sukang iloko","Sukang tuba","Sukang maasim","Lahat ng nabanggit"],c:3,e:"Depende sa region, iba-ibang suka ang ginagamit sa adobo!"}
+  food:{
+    easy:[
+      {q:"Anong probinsya ang Sisig Capital?",o:["Bulacan","Pampanga","Tarlac","Bataan"],c:1,e:"Pampanga — lalo na ang Angeles City — ang kilala bilang sisig capital."},
+      {q:"Main ingredient of kare-kare?",o:["Pork belly","Oxtail","Chicken","Fish"],c:1,e:"Kare-kare — oxtail in a thick peanut sauce."},
+      {q:"What Filipino dessert is made from purple yam?",o:["Leche flan","Ube halaya","Biko","Turon"],c:1,e:"Ube halaya — sweet jam from boiled mashed purple yam."},
+      {q:"Ano ang tawag sa garlic fried rice?",o:["Kanin","Sinangag","Arroz","Lugaw"],c:1,e:"Sinangag — ang iconic na garlic fried rice ng Pinoy!"},
+      {q:"What is balut?",o:["Fried quail eggs","Fertilized duck egg","Salted egg","Boiled chicken egg"],c:1,e:"Balut — fertilized developing duck egg, popular street food."},
+      {q:"Pangunahing sangkap ng Bicol Express?",o:["Bagoong","Coconut milk at sili","Tamarind","Soy sauce"],c:1,e:"Bicol Express uses gata (coconut milk) and lots of sili."},
+      {q:"Silog comes from what two words?",o:["Sinigang + Log","Sinangag + Itlog","Sino + Alog","Sitsaron + Log"],c:1,e:"Silog = Sinangag (garlic rice) + Itlog (egg)!"},
+      {q:"Which region is known for bagnet?",o:["Cebu","Ilocos","Bicol","Davao"],c:1,e:"Bagnet — crispy deep-fried pork belly from the Ilocos region."},
+    ],
+    normal:[
+      {q:"What souring agent is used in sinigang?",o:["Vinegar","Tamarind","Calamansi","Tomato"],c:1,e:"Traditional sinigang uses sampaloc (tamarind)."},
+      {q:"Ano ang pambansang pagkain ng Pilipinas?",o:["Adobo","Sinigang","Lechon","Kare-kare"],c:0,e:"Adobo is widely considered the unofficial national dish."},
+      {q:"What cheese is used in traditional ensaymada?",o:["Eden cheese","Edam (Queso de Bola)","Cheddar","Cream cheese"],c:1,e:"Traditional ensaymada uses Edam cheese (queso de bola)."},
+      {q:"Saang probinsya sikat ang Chicken Inasal?",o:["Cebu","Bacolod","Iloilo","Davao"],c:1,e:"Chicken Inasal originated in Bacolod City, Negros Occidental."},
+      {q:"What is kinilaw?",o:["Grilled fish","Raw seafood cured in vinegar","Deep fried squid","Boiled shellfish"],c:1,e:"Kinilaw — Filipino ceviche, raw seafood cured in vinegar or calamansi."},
+    ],
+    hard:[
+      {q:"Primary ingredient of dinuguan?",o:["Pork liver","Pork blood","Chicken giblets","Beef tripe"],c:1,e:"Dinuguan — savory stew cooked in pig's blood."},
+      {q:"Anong probinsya ang pinakasikat sa tuba (palm wine)?",o:["Pampanga","Ilocos Norte","Quezon","Batangas"],c:1,e:"Ilocos Norte is famous for basi and tuba — traditional Ilocano drinks."},
+      {q:"What is burong isda?",o:["Smoked fish","Fermented rice and fish","Dried fish","Salted fish"],c:1,e:"Burong isda — Kapampangan fermented rice and freshwater fish."},
+      {q:"What makes Vigan longganisa unique?",o:["It's sweet","Very garlicky and small","Made of chicken","It's smoked"],c:1,e:"Vigan longganisa — very garlicky, small, reddish, from Ilocos Sur."},
     ]
   },
-  "Philippine Culture": {
-    icon: "🎭", bg: "#FFF8E7",
-    questions: [
-      {q:"Ano ang tawag sa Filipino gesture ng pag-point gamit ang lips?",o:["Nguso","Tingin","Kilay","Turo"],c:0,e:"Ang 'nguso' o pag-point gamit ang labi ay uniquely Filipino gesture!"},
-      {q:"What is 'mano po'?",o:["A dance","A greeting to elders","A type of food","A prayer"],c:1,e:"Mano po is taking an elder's hand and pressing it to your forehead as respect."},
-      {q:"Anong festival ang pinakamalaki sa Cebu?",o:["Ati-Atihan","Sinulog","Pahiyas","MassKara"],c:1,e:"Ang Sinulog Festival ay ginagawa tuwing third Sunday of January sa Cebu."},
-      {q:"What is 'bayanihan'?",o:["A type of boat","Community spirit of helping","A martial art","A traditional song"],c:1,e:"Bayanihan refers to the Filipino tradition of communal unity and helping neighbors."},
-      {q:"Ano ang 'pasalubong'?",o:["A souvenir or gift from a trip","A type of dance","A greeting","A holiday"],c:0,e:"Pasalubong is bringing gifts or treats for family when coming home from a trip."},
-      {q:"Which Filipino value means 'shame' or 'sense of propriety'?",o:["Utang na loob","Hiya","Pakikisama","Bayanihan"],c:1,e:"Hiya is a complex social value related to shame, modesty, and social propriety."},
-      {q:"Ano ang pambansang sayaw ng Pilipinas?",o:["Tinikling","Pandanggo sa Ilaw","Cariñosa","Kuratsa"],c:2,e:"Ang Cariñosa ang opisyal na national dance ng Pilipinas."},
-      {q:"What does 'po' and 'opo' signify in Filipino?",o:["Agreement","Respect","Excitement","Sadness"],c:1,e:"Po and opo are used to show respect, especially when speaking to elders."},
-      {q:"Saan ginagawa ang MassKara Festival?",o:["Iloilo","Bacolod","Davao","Zamboanga"],c:1,e:"Ang MassKara Festival ay celebration ng Bacolod City tuwing October."},
-      {q:"What is 'Filipino time' commonly known as?",o:["Being very early","Being exactly on time","Being fashionably late","Skipping events"],c:2,e:"Filipino time humorously refers to arriving later than the scheduled time."}
+  culture:{
+    easy:[
+      {q:"What is mano po?",o:["A dance","A greeting to elders","A type of food","A prayer"],c:1,e:"Mano po — pressing an elder's hand to your forehead as respect."},
+      {q:"What is bayanihan?",o:["A type of boat","Community spirit of helping","A martial art","A traditional song"],c:1,e:"Bayanihan — Filipino tradition of communal unity."},
+      {q:"Ano ang pasalubong?",o:["A souvenir or gift from a trip","A type of dance","A greeting","A holiday"],c:0,e:"Pasalubong — bringing gifts when coming home from a trip."},
+      {q:"Anong festival ang pinakamalaki sa Cebu?",o:["Ati-Atihan","Sinulog","Pahiyas","MassKara"],c:1,e:"Sinulog Festival — tuwing third Sunday of January sa Cebu."},
+      {q:"Pambansang sayaw ng Pilipinas?",o:["Tinikling","Pandanggo sa Ilaw","Carinosa","Kuratsa"],c:2,e:"Ang Carinosa ang opisyal na national dance ng Pilipinas."},
+      {q:"What do po and opo signify?",o:["Agreement","Respect","Excitement","Sadness"],c:1,e:"Po and opo — used to show respect to elders."},
+      {q:"Tawag sa Pinoy gesture ng pag-point gamit ang lips?",o:["Nguso","Tingin","Kilay","Turo"],c:0,e:"Ang nguso o lip pointing ay uniquely Filipino!"},
+      {q:"Saan ginagawa ang MassKara Festival?",o:["Iloilo","Bacolod","Davao","Zamboanga"],c:1,e:"MassKara Festival — Bacolod City tuwing October."},
+    ],
+    normal:[
+      {q:"Which Filipino value means debt of gratitude?",o:["Hiya","Utang na loob","Pakikisama","Bayanihan"],c:1,e:"Utang na loob — owing gratitude and reciprocating kindness."},
+      {q:"What is harana?",o:["A type of dance","Serenading a girl outside her home","A festival","A wedding ceremony"],c:1,e:"Harana — traditional Filipino courtship by serenading a woman."},
+      {q:"Saan ginagawa ang Pahiyas Festival?",o:["Cebu","Quezon","Ilocos","Pampanga"],c:1,e:"Pahiyas Festival — Lucban, Quezon, May 15, with rice decorations."},
+      {q:"What is the national flower of the Philippines?",o:["Rose","Sampaguita","Waling-waling","Ilang-ilang"],c:1,e:"Sampaguita (Jasminum sambac) — national flower of the Philippines."},
+      {q:"What is the national martial art of the Philippines?",o:["Karate","Arnis/Eskrima","Judo","Wushu"],c:1,e:"Arnis (also Eskrima or Kali) — national martial art."},
+    ],
+    hard:[
+      {q:"What is Pintados Festival known for?",o:["Street dancing","Traditional tattoo art and body painting","Giant lanterns","Fluvial processions"],c:1,e:"Pintados Festival in Tacloban — celebrates ancient Visayan warrior tattooing."},
+      {q:"What is ambahan in Hanunuo Mangyan culture?",o:["A dance","A type of boat","A form of poetry","A weapon"],c:2,e:"Ambahan — poetic form of the Hanunuo Mangyan people of Mindoro."},
+      {q:"What does lihi mean in Filipino superstition?",o:["Bad luck","Prenatal influence on a child from mother's cravings","A curse","A blessing"],c:1,e:"Lihi — belief that a mother's cravings affect the child's traits."},
     ]
   },
-  "Philippine Geography": {
-    icon: "🏝️", bg: "#E7FFF2",
-    questions: [
-      {q:"Ilan ang islands ng Pilipinas?",o:["5,000","7,641","10,000","3,500"],c:1,e:"Ang Pilipinas ay binubuo ng 7,641 islands based sa latest NAMRIA count."},
-      {q:"What is the tallest mountain in the Philippines?",o:["Mt. Pinatubo","Mt. Apo","Mt. Pulag","Mt. Mayon"],c:1,e:"Mt. Apo in Davao stands at 2,954 meters — the highest peak in the Philippines."},
-      {q:"Saang probinsya makikita ang Chocolate Hills?",o:["Cebu","Bohol","Palawan","Leyte"],c:1,e:"Ang Chocolate Hills ay nasa Bohol — may mahigit 1,200 cone-shaped hills."},
-      {q:"Which Philippine river is the longest?",o:["Pasig River","Cagayan River","Agusan River","Pampanga River"],c:1,e:"The Cagayan River (Rio Grande de Cagayan) is 505 km long."},
-      {q:"Ano ang pinakamaliit na volcano sa mundo na nasa Pilipinas?",o:["Mt. Pinatubo","Taal Volcano","Mt. Mayon","Mt. Hibok-Hibok"],c:1,e:"Ang Taal Volcano sa Batangas ay isa sa pinakamaliit na active volcanoes sa mundo."},
-      {q:"What is the largest island in the Philippines?",o:["Mindanao","Visayas","Luzon","Palawan"],c:2,e:"Luzon is the largest island with an area of about 109,965 sq km."},
-      {q:"Saan matatagpuan ang Tubbataha Reefs?",o:["Palawan","Cebu","Mindoro","Bohol"],c:0,e:"Ang Tubbataha Reefs Natural Park ay nasa Sulu Sea, part ng Palawan."},
-      {q:"Which city is the 'Summer Capital of the Philippines'?",o:["Tagaytay","Baguio","Davao","Sagada"],c:1,e:"Baguio City is called the Summer Capital due to its cool mountain climate."},
-      {q:"Ano ang pinakamalalim na bahagi ng dagat malapit sa Pilipinas?",o:["Mariana Trench","Philippine Trench","Sulu Trench","Manila Trench"],c:0,e:"The Mariana Trench, east of the Philippines, is the deepest point on Earth."},
-      {q:"Saang probinsya ang Puerto Princesa Underground River?",o:["Cebu","Mindoro","Palawan","Bohol"],c:2,e:"Ang Puerto Princesa Subterranean River National Park ay UNESCO World Heritage Site sa Palawan."}
+  geo:{
+    easy:[
+      {q:"Ilan ang islands ng Pilipinas?",o:["5,000","7,641","10,000","3,500"],c:1,e:"7,641 islands — based on the latest NAMRIA count."},
+      {q:"Pinakamataas na bundok sa Pilipinas?",o:["Mt. Pinatubo","Mt. Apo","Mt. Pulag","Mt. Mayon"],c:1,e:"Mt. Apo in Davao — 2,954 meters, highest peak."},
+      {q:"Saang probinsya ang Chocolate Hills?",o:["Cebu","Bohol","Palawan","Leyte"],c:1,e:"Chocolate Hills — Bohol! Mahigit 1,200 cone-shaped hills."},
+      {q:"Largest island in the Philippines?",o:["Mindanao","Visayas","Luzon","Palawan"],c:2,e:"Luzon — about 109,965 sq km."},
+      {q:"Summer Capital of the Philippines?",o:["Tagaytay","Baguio","Davao","Sagada"],c:1,e:"Baguio City — cool mountain climate."},
+      {q:"Pinakamahaba na ilog sa Pilipinas?",o:["Pasig River","Cagayan River","Agusan River","Pampanga River"],c:1,e:"Cagayan River — 505 km long."},
+      {q:"Saan ang Tubbataha Reefs?",o:["Palawan","Cebu","Mindoro","Bohol"],c:0,e:"Tubbataha Reefs — Sulu Sea, part of Palawan."},
+      {q:"Pinakamaliit na active volcano sa mundo na nasa Pilipinas?",o:["Mt. Pinatubo","Taal Volcano","Mt. Mayon","Mt. Hibok-Hibok"],c:1,e:"Taal Volcano sa Batangas — pinakamaliit na active volcano."},
+    ],
+    normal:[
+      {q:"Deepest lake in the Philippines?",o:["Laguna de Bay","Lake Sebu","Lake Lanao","Taal Lake"],c:2,e:"Lake Lanao in Mindanao — deepest at about 112m."},
+      {q:"Saang probinsya ang Puerto Princesa Underground River?",o:["Cebu","Mindoro","Palawan","Bohol"],c:2,e:"Puerto Princesa Subterranean River — UNESCO World Heritage in Palawan."},
+      {q:"Largest lake in the Philippines?",o:["Taal Lake","Laguna de Bay","Lake Lanao","Buhi Lake"],c:1,e:"Laguna de Bay — largest lake in the Philippines."},
+      {q:"Province with the most islands?",o:["Palawan","Cebu","Sulu","Romblon"],c:0,e:"Palawan — over 1,700 islands and islets."},
+      {q:"Capital of the Cordillera Administrative Region?",o:["Baguio City","Tabuk","Lagawe","Bontoc"],c:0,e:"Baguio City — regional center of CAR."},
+    ],
+    hard:[
+      {q:"Southernmost point of the Philippines?",o:["Tawi-Tawi","Sibutu Island","Cape San Agustin","Balut Island"],c:1,e:"Sibutu Island in Tawi-Tawi — southernmost island."},
+      {q:"Total area of the Philippines in sq km?",o:["200,170","298,170","340,000","189,000"],c:1,e:"Philippines total land area — approximately 298,170 sq km."},
+      {q:"What is the deepest trench near the Philippines?",o:["Mariana Trench","Philippine Trench","Sulu Trench","Manila Trench"],c:0,e:"The Mariana Trench, east of Philippines, is the deepest on Earth."},
     ]
   },
-  "Pinoy Pop Culture": {
-    icon: "🎬", bg: "#F3EEFF",
-    questions: [
-      {q:"Ano ang tawag sa iconic Filipino TV format na 'noon time show'?",o:["Eat Bulaga!","Showtime","Wowowin","Lahat ng nabanggit"],c:3,e:"All of these are famous Filipino noontime shows!"},
-      {q:"What classic Filipino game involves a slipper?",o:["Patintero","Tumbang preso","Luksong tinik","Agawan base"],c:1,e:"Tumbang preso uses a slipper (tsinelas) to knock down a tin can."},
-      {q:"Sino ang 'Star for All Seasons'?",o:["Nora Aunor","Vilma Santos","Sharon Cuneta","Sarah Geronimo"],c:1,e:"Si Vilma Santos ang tinaguriang 'Star for All Seasons' sa Philippine cinema."},
-      {q:"Anong laro ang 'piko'?",o:["Tag","Hopscotch","Hide and seek","Jump rope"],c:1,e:"Piko is the Filipino version of hopscotch, played with a pamato (stone)."},
-      {q:"Who is the Philippine 'King of Comedy'?",o:["Vice Ganda","Dolphy","Vic Sotto","Jose de Leon"],c:1,e:"Dolphy (Rodolfo Vera Quizon Sr.) is widely regarded as the King of Philippine Comedy."},
-      {q:"Anong Pinoy superhero ang gawa ni Mars Ravelo?",o:["Captain Barbell","Darna","Panday","Pareho A at B"],c:3,e:"Si Darna at Captain Barbell ay parehong creation ni Mars Ravelo."},
-      {q:"What traditional Filipino instrument is made of bamboo?",o:["Kulintang","Banduria","Kubing","Rondalla"],c:2,e:"The kubing is a bamboo jaw harp used by various indigenous Filipino groups."},
-      {q:"Ano ang 'hugot'?",o:["A dance move","Deep emotional lines","A type of food","A sport"],c:1,e:"Hugot refers to deep, emotional quotes or pickup lines — very Pinoy!"},
-      {q:"Saang laro ang 'It' na humahabol sa mga players?",o:["Agawan base","Habulan/Tag","Chinese garter","Luksong baka"],c:1,e:"Habulan (or Tag) is where the 'It' chases and tries to tag other players."},
-      {q:"What Filipino card game is similar to 'Crazy Eights'?",o:["Pusoy Dos","Tongits","Unggoy-ungguyan","Mahjong"],c:2,e:"Unggoy-ungguyan is a Filipino card game similar to Crazy Eights."}
+  popculture:{
+    easy:[
+      {q:"Classic Filipino game involving a slipper?",o:["Patintero","Tumbang preso","Luksong tinik","Agawan base"],c:1,e:"Tumbang preso — uses a tsinelas to knock down a tin can."},
+      {q:"Sino ang Star for All Seasons?",o:["Nora Aunor","Vilma Santos","Sharon Cuneta","Sarah Geronimo"],c:1,e:"Vilma Santos — Star for All Seasons in Philippine cinema."},
+      {q:"Anong laro ang piko?",o:["Tag","Hopscotch","Hide and seek","Jump rope"],c:1,e:"Piko — Filipino hopscotch."},
+      {q:"Philippine King of Comedy?",o:["Vice Ganda","Dolphy","Vic Sotto","Jose de Leon"],c:1,e:"Dolphy (Rodolfo Vera Quizon Sr.) — King of Philippine Comedy."},
+      {q:"Ano ang hugot?",o:["A dance move","Deep emotional lines","A type of food","A sport"],c:1,e:"Hugot — deep emotional quotes or pickup lines."},
+      {q:"Filipino bamboo jaw harp?",o:["Kulintang","Banduria","Kubing","Rondalla"],c:2,e:"Kubing — bamboo jaw harp used by indigenous groups."},
+      {q:"Mars Ravelo Pinoy superheroes?",o:["Captain Barbell only","Darna only","Panday","Both Captain Barbell and Darna"],c:3,e:"Darna at Captain Barbell — parehong creation ni Mars Ravelo!"},
+      {q:"Filipino card game like Crazy Eights?",o:["Pusoy Dos","Tongits","Unggoy-ungguyan","Mahjong"],c:2,e:"Unggoy-ungguyan — Filipino Crazy Eights."},
+    ],
+    normal:[
+      {q:"ABS-CBN's iconic Sunday variety show?",o:["ASAP","Party Pilipinas","SOP","GGV"],c:0,e:"ASAP — ABS-CBN's long-running Sunday variety show."},
+      {q:"When did Shake, Rattle and Roll premiere?",o:["1984","1990","1988","1980"],c:0,e:"Shake, Rattle and Roll premiered in 1984 — OG Filipino horror anthology."},
+      {q:"Game that uses a rubber band string at varying heights?",o:["Patintero","Chinese garter","Luksong baka","Habulan"],c:1,e:"Chinese garter — jump over elastic band at different heights."},
+      {q:"Sino ang Asia's Songbird?",o:["Sarah Geronimo","Regine Velasquez","Lea Salonga","Morissette"],c:1,e:"Regine Velasquez — Asia's Songbird."},
+      {q:"What is patintero?",o:["A card game","A street game with lines and runners","A dance","A song"],c:1,e:"Patintero — a street game where taggers guard lines while runners try to pass."},
+    ],
+    hard:[
+      {q:"What is the pre-colonial Visayan term for gender-fluid spiritual leaders?",o:["Babaylan","Asog","Bayot","Binabae"],c:1,e:"Asog — pre-colonial Visayan term for gender-fluid spiritual leaders."},
+      {q:"What is pantomina in Sorsogon?",o:["A puppet show","A courtship dance festival","A street parade","A type of music"],c:1,e:"Pantomina — courtship dance festival in Sorsogon, also called dance of the doves."},
+      {q:"What 1970s Filipino film genre featured women fighters?",o:["Bomba films","Susanna films","Female action films","Komiks adaptations"],c:2,e:"1970s saw a surge of Pinay action stars like Rosemarie Gil."},
     ]
   }
 };
 
-// ===== GAME STATE =====
-let currentCat = null;
-let currentQs = [];
-let currentIdx = 0;
-let score = 0;
-let correctCount = 0;
-let streak = 0;
-let maxStreak = 0;
-let timer = null;
-let timeLeft = 15;
-const TIME_PER_Q = 15;
-let bestScores = {};
-let bestStars = {};
-let audioCtx = null;
-let soundEnabled = true;
+// ============================================================
+// RANKS & XP
+// ============================================================
+const RANKS=[
+  {name:"Magsasaka",minXp:0,icon:"🌾"},
+  {name:"Estudyante",minXp:200,icon:"📚"},
+  {name:"Manlilikha",minXp:500,icon:"🎨"},
+  {name:"Bayani",minXp:1000,icon:"⚔️"},
+  {name:"Guro",minXp:1800,icon:"🧑‍🏫"},
+  {name:"Heneral",minXp:3000,icon:"🎖️"},
+  {name:"Pilipino",minXp:5000,icon:"🇵🇭"},
+  {name:"Hari ng Trivia",minXp:8000,icon:"👑"},
+];
+function getRank(xp){let r=RANKS[0];for(const rk of RANKS){if(xp>=rk.minXp)r=rk;else break;}return r;}
+function getNextRank(xp){for(let i=0;i<RANKS.length-1;i++){if(xp<RANKS[i+1].minXp)return RANKS[i+1];}return null;}
+function getXpProg(xp){const r=getRank(xp),n=getNextRank(xp);if(!n)return{pct:100,label:"MAX RANK!"};const range=n.minXp-r.minXp,prog=xp-r.minXp;return{pct:Math.round(prog/range*100),label:`${prog}/${range} XP`};}
 
-// ===== LOAD SAVED DATA =====
-try { soundEnabled = JSON.parse(localStorage.getItem('alamMoBaSound') ?? 'true'); } catch(e) {}
-try { bestScores = JSON.parse(localStorage.getItem('alamMoBaBest') || '{}'); } catch(e) {}
-try { bestStars = JSON.parse(localStorage.getItem('alamMoBaStars') || '{}'); } catch(e) {}
-
-function saveBest() {
-  try { localStorage.setItem('alamMoBaBest', JSON.stringify(bestScores)); } catch(e) {}
-  try { localStorage.setItem('alamMoBaStars', JSON.stringify(bestStars)); } catch(e) {}
-}
-function getGlobalBest() {
-  return Object.values(bestScores).reduce((a, b) => Math.max(a, b), 0);
-}
-
-// ===== SOUND =====
-function saveSoundSetting() {
-  try { localStorage.setItem('alamMoBaSound', JSON.stringify(soundEnabled)); } catch(e) {}
-}
-function updateSoundToggleUI() {
-  const btn = document.getElementById('soundToggle');
-  if (!btn) return;
-  btn.textContent = soundEnabled ? '🔊 Sound' : '🔇 Sound';
-  btn.classList.toggle('active', soundEnabled);
-}
-function toggleSound() {
-  soundEnabled = !soundEnabled;
-  saveSoundSetting();
-  updateSoundToggleUI();
-  if (soundEnabled) playClickSound();
-}
-function getAudioCtx() {
-  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  return audioCtx;
-}
-function playTone(freq, duration, type='sine', volume=0.03, whenOffset=0) {
-  if (!soundEnabled) return;
-  try {
-    const ctx = getAudioCtx();
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    const now = ctx.currentTime + whenOffset;
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, now);
-    gain.gain.setValueAtTime(0.0001, now);
-    gain.gain.exponentialRampToValueAtTime(volume, now + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
-    osc.connect(gain);
-    gain.connect(ctx.destination);
-    osc.start(now); osc.stop(now + duration + 0.02);
-  } catch(e) {}
-}
-function playClickSound() { playTone(520, 0.05, 'triangle', 0.02); }
-function playCorrectSound() {
-  playTone(523.25, 0.10, 'triangle', 0.05, 0.00);
-  playTone(659.25, 0.10, 'triangle', 0.05, 0.08);
-  playTone(783.99, 0.14, 'triangle', 0.05, 0.16);
-}
-function playWrongSound() {
-  playTone(320, 0.12, 'sawtooth', 0.03, 0.00);
-  playTone(240, 0.14, 'sawtooth', 0.03, 0.10);
-}
-function playStreakSound(s) {
-  if (s >= 3) {
-    playTone(880, 0.06, 'triangle', 0.04, 0.00);
-    playTone(1046, 0.08, 'triangle', 0.04, 0.06);
+// ============================================================
+// STATE
+// ============================================================
+let S={totalXp:0,lp:{},bestScores:{},lb:[]};
+function saveS(){try{localStorage.setItem('ambv2',JSON.stringify(S));}catch(e){}}
+function loadS(){
+  try{const s=JSON.parse(localStorage.getItem('ambv2'));if(s)S={...S,...s};}catch(e){}
+  if(!S.lb||S.lb.length===0){
+    S.lb=[
+      {name:"Bayaning Rizal",xp:7200,rank:"Heneral",date:"Mar 2026"},
+      {name:"Ate Ninang",xp:4100,rank:"Pilipino",date:"Mar 2026"},
+      {name:"Kuya Nando",xp:2300,rank:"Guro",date:"Mar 2026"},
+      {name:"Lola Nena",xp:1500,rank:"Bayani",date:"Feb 2026"},
+      {name:"Dodong Trivia",xp:900,rank:"Manlilikha",date:"Feb 2026"},
+    ];
   }
 }
-
-// ===== OFFLINE =====
-function updateOfflineBanner() {
-  const banner = document.getElementById('offlineBanner');
-  if (!navigator.onLine) banner.classList.add('show');
-  else banner.classList.remove('show');
+function getUnlockedUpTo(){
+  for(let i=0;i<LEVELS.length;i++){const lp=S.lp[LEVELS[i].id];if(!lp||!lp.stars)return LEVELS[i].id;}
+  return LEVELS[LEVELS.length-1].id+1;
 }
 
-// ===== SCREEN MANAGEMENT =====
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+// ============================================================
+// SOUND
+// ============================================================
+let soundEnabled=true,audioCtx=null;
+try{soundEnabled=JSON.parse(localStorage.getItem('ambSound')??"true");}catch(e){}
+function saveSndSetting(){try{localStorage.setItem('ambSound',JSON.stringify(soundEnabled));}catch(e){}}
+function updateSndUI(){const b=document.getElementById('soundToggle');if(!b)return;b.textContent=soundEnabled?'Sound ON':'Sound OFF';b.classList.toggle('active',soundEnabled);}
+function toggleSound(){soundEnabled=!soundEnabled;saveSndSetting();updateSndUI();if(soundEnabled)playClickSound();}
+function getActx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+function tone(freq,dur,type='sine',vol=0.03,when=0){if(!soundEnabled)return;try{const ctx=getActx(),osc=ctx.createOscillator(),gain=ctx.createGain(),now=ctx.currentTime+when;osc.type=type;osc.frequency.setValueAtTime(freq,now);gain.gain.setValueAtTime(0.0001,now);gain.gain.exponentialRampToValueAtTime(vol,now+0.01);gain.gain.exponentialRampToValueAtTime(0.0001,now+dur);osc.connect(gain);gain.connect(ctx.destination);osc.start(now);osc.stop(now+dur+0.02);}catch(e){}}
+function playClickSound(){tone(520,.05,'triangle',.02);}
+function playCorrectSound(){tone(523,.1,'triangle',.05,0);tone(659,.1,'triangle',.05,.08);tone(784,.14,'triangle',.05,.16);}
+function playWrongSound(){tone(320,.12,'sawtooth',.03,0);tone(240,.14,'sawtooth',.03,.1);}
+function playUnlockSound(){[523,659,784,1047].forEach((f,i)=>tone(f,.12,'triangle',.04,i*.09));}
+function playRankUpSound(){[440,554,659,880].forEach((f,i)=>tone(f,.15,'triangle',.05,i*.08));}
+
+// ============================================================
+// SCREENS
+// ============================================================
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
-  if (id === 'menu') updateMenu();
-  if (id === 'categories') renderCategories();
+  if(id==='menu')renderMenu();
+  if(id==='mapscreen')renderMap();
+  if(id==='leaderboard')renderLeaderboard();
 }
-function updateMenu() {
-  document.getElementById('globalBest').textContent = getGlobalBest();
-  updateSoundToggleUI();
-}
-
-// ===== CATEGORIES =====
-function getStarsForCat(name) {
-  return bestStars[name] || 0;
-}
-function renderCategories() {
-  const grid = document.getElementById('catGrid');
-  grid.innerHTML = '';
-  Object.entries(QUESTIONS).forEach(([name, data], i) => {
-    const best = bestScores[name] || 0;
-    const stars = getStarsForCat(name);
-    const card = document.createElement('div');
-    card.className = 'cat-card slide-up';
-    card.style.animationDelay = (i * 0.07) + 's';
-    const starsHtml = [0,1,2].map(j => `<div class="csm ${j < stars ? 'on' : 'off'}"></div>`).join('');
-    card.innerHTML = `
-      <div class="cat-icon" style="background:${data.bg}">${data.icon}</div>
-      <div class="cat-info">
-        <div class="cat-name">${name}</div>
-        <div class="cat-count">10 tanong</div>
-      </div>
-      <div class="cat-meta">
-        ${best > 0 ? `<div class="cat-best">⭐ ${best}</div>` : ''}
-        <div class="cat-stars-mini">${starsHtml}</div>
-      </div>
-      <div class="cat-chevron">›</div>
-    `;
-    card.onclick = () => { playClickSound(); startQuiz(name); };
-    grid.appendChild(card);
-  });
+function renderMenu(){
+  updateSndUI();
+  const xp=S.totalXp,rank=getRank(xp),next=getNextRank(xp),prog=getXpProg(xp);
+  document.getElementById('menuRankLabel').textContent=`${rank.icon} ${rank.name}`;
+  document.getElementById('menuXpPts').textContent=next?`${xp} / ${next.minXp} XP`:`${xp} XP — MAX!`;
+  document.getElementById('menuXpBar').style.width=prog.pct+'%';
+  document.getElementById('menuXpBarLabel').textContent=`${xp} XP total`;
+  const scores=Object.values(S.bestScores).map(Number);
+  document.getElementById('globalBest').textContent=scores.length?Math.max(...scores):0;
 }
 
-// ===== STREAK BAR =====
-function renderStreakBar() {
-  const bar = document.getElementById('streakBar');
-  if (streak === 0) {
-    bar.innerHTML = '<span style="opacity:0.5">Answer correctly to build a streak!</span>';
-  } else {
-    const dots = Array.from({length: 5}, (_, i) =>
-      `<div class="streak-dot ${i < streak % 5 || streak >= 5 ? 'lit' : ''}"></div>`
-    ).join('');
-    const label = streak >= 3 ? `🔥 ${streak} Streak!` : `Streak: ${streak}`;
-    bar.innerHTML = `<span>${label}</span>${dots}`;
+// ============================================================
+// MAP RENDERING
+// ============================================================
+function renderMap(){
+  const inner=document.getElementById('mapInner');
+  inner.innerHTML='';
+  const unlockedUpTo=getUnlockedUpTo();
+
+  // Region banners
+  [{label:'🌿 LUZON — Easy',y:5},{label:'🌊 VISAYAS — Normal',y:43},{label:'🔥 MINDANAO — Hard',y:72}]
+    .forEach(b=>{const el=document.createElement('div');el.className='region-banner';el.style.top=b.y+'%';el.textContent=b.label;inner.appendChild(el);});
+
+  // Path lines
+  for(let i=0;i<LEVELS.length-1;i++){
+    const a=LEVELS[i],b=LEVELS[i+1];
+    const x1=a.x,y1=a.y,x2=b.x,y2=b.y;
+    const cx=(x1+x2)/2,cy=(y1+y2)/2,dx=x2-x1,dy=y2-y1;
+    const len=Math.sqrt(dx*dx+dy*dy),angle=Math.atan2(dy,dx)*180/Math.PI;
+    const line=document.createElement('div');
+    line.className='node-path';
+    line.style.cssText=`left:${cx}%;top:${cy}%;width:${len}%;height:5px;transform:translate(-50%,-50%) rotate(${angle}deg);opacity:${S.lp[a.id]?.stars>0?.65:.2};`;
+    inner.appendChild(line);
   }
+
+  // Nodes
+  LEVELS.forEach(lv=>{
+    const lp=S.lp[lv.id];
+    const stars=lp?lp.stars:0;
+    const isCompleted=stars>0,isCurrent=lv.id===unlockedUpTo,isLocked=lv.id>unlockedUpTo;
+    const node=document.createElement('div');
+    node.className='level-node '+(isLocked?'locked':isCurrent?'current':isCompleted?`completed-${Math.min(stars,3)}`:'unlocked');
+    node.style.left=lv.x+'%';node.style.top=lv.y+'%';
+    if(isLocked){
+      node.innerHTML=`<div class="node-lock">🔒</div>`;
+    }else{
+      const sh=[0,1,2].map(i=>`<div class="nstar ${i<stars?'on':'off'}"></div>`).join('');
+      node.innerHTML=`<div class="node-num">${lv.id}</div><div class="node-stars">${sh}</div>`;
+    }
+    node.onclick=()=>{playClickSound();showLevelPopup(lv,isLocked,stars,lp?.score||0);};
+    inner.appendChild(node);
+  });
+
+  const done=Object.values(S.lp).filter(l=>l.stars>0).length;
+  document.getElementById('mapProgressLabel').textContent=`${done} / 20 levels done`;
+  const rank=getRank(S.totalXp);
+  document.getElementById('mapRankLabel').textContent=`${rank.icon} ${rank.name}`;
+  document.getElementById('mapXpLabel').textContent=`${S.totalXp} XP`;
+
+  setTimeout(()=>{
+    const scroll=document.getElementById('mapScroll');
+    const cur=LEVELS.find(l=>l.id===Math.min(unlockedUpTo,LEVELS.length));
+    if(cur){const h=inner.offsetHeight||1500;scroll.scrollTo({top:Math.max(0,(cur.y/100)*h-200),behavior:'smooth'});}
+  },300);
 }
 
-// ===== QUIZ =====
-function startQuiz(catName) {
-  currentCat = catName;
-  const data = QUESTIONS[catName];
-  currentQs = shuffleArray([...data.questions]).slice(0, 10);
-  currentIdx = 0;
-  score = 0;
-  correctCount = 0;
-  streak = 0;
-  maxStreak = 0;
-  document.getElementById('quizCatLabel').textContent = data.icon + ' ' + catName;
-  document.getElementById('quizScore').textContent = '0';
-  renderStreakBar();
-  showScreen('quiz');
-  renderQuestion();
+// ============================================================
+// LEVEL POPUP
+// ============================================================
+function showLevelPopup(lv,locked,stars,bestScore){
+  const ex=document.getElementById('lvPopup');if(ex)ex.remove();
+  const overlay=document.createElement('div');
+  overlay.className='level-popup-overlay';overlay.id='lvPopup';
+  const topicName={history:'Philippine History',food:'Filipino Food',culture:'Philippine Culture',geo:'Philippine Geography',popculture:'Pinoy Pop Culture'}[lv.topic]||lv.topic;
+  const diffInfo={easy:'Easy — 15s per question',normal:'Normal — 12s per question',hard:'Hard — 10s per question'}[lv.diff];
+  const sh=[0,1,2].map(i=>`<div class="pstar ${i<stars?'earned':'empty'}"></div>`).join('');
+  overlay.innerHTML=`<div class="level-popup"><div class="popup-handle"></div><div class="popup-region ${lv.region}">${lv.region.toUpperCase()} — Level ${lv.id}</div><div class="popup-title">${lv.icon} ${lv.name}</div><div class="popup-topic">${topicName}</div><div class="popup-diff ${lv.diff}">${diffInfo}</div><div class="popup-stars-row">${sh}</div>${bestScore>0?`<div class="popup-best">Best: <strong>${bestScore} pts</strong></div>`:''}${locked?`<div class="popup-locked-msg">🔒 Complete Level ${lv.id-1} first!</div>`:`<div class="popup-actions"><button class="btn-play" onclick="closePopup();startQuiz(${lv.id})">PLAY!</button><button class="popup-close" onclick="closePopup()">Cancel</button></div>`}</div>`;
+  overlay.onclick=e=>{if(e.target===overlay)closePopup();};
+  document.getElementById('app').appendChild(overlay);
+}
+function closePopup(){const el=document.getElementById('lvPopup');if(el)el.remove();}
+
+// ============================================================
+// QUIZ ENGINE
+// ============================================================
+let cLevelId=null,cQs=[],cIdx=0,cScore=0,cCorrect=0,cStreak=0,cMaxStreak=0;
+let timer=null,timeLeft=15,TIME_PER_Q=15;
+
+function getQs(lv){
+  const bank=QB[lv.topic];if(!bank)return[];
+  let pool=[];
+  if(lv.diff==='easy')pool=[...(bank.easy||[])];
+  else if(lv.diff==='normal')pool=[...(bank.normal||[]),...(bank.easy||[]).slice(0,3)];
+  else pool=[...(bank.hard||[]),...(bank.normal||[]).slice(0,3)];
+  return shuffle(pool).slice(0,10);
 }
 
-function renderQuestion() {
-  clearInterval(timer);
-  timeLeft = TIME_PER_Q;
-  updateTimer();
-  startTimer();
+function startQuiz(levelId){
+  const lv=LEVELS.find(l=>l.id===levelId);if(!lv)return;
+  cLevelId=levelId;
+  TIME_PER_Q={easy:15,normal:12,hard:10}[lv.diff]||15;
+  cQs=getQs(lv);
+  if(!cQs.length){alert('No questions available!');return;}
+  cIdx=0;cScore=0;cCorrect=0;cStreak=0;cMaxStreak=0;
+  document.getElementById('quizCatLabel').textContent=`${lv.icon} Lvl ${lv.id}: ${lv.name}`;
+  document.getElementById('quizScore').textContent='0';
+  renderStreakBar();showScreen('quiz');renderQuestion();
+}
 
-  const pct = ((currentIdx) / currentQs.length) * 100;
-  document.getElementById('qProgressFill').style.width = pct + '%';
-
-  const q = currentQs[currentIdx];
-  const body = document.getElementById('quizBody');
-  const letters = ['A','B','C','D'];
-  body.innerHTML = `
-    <div class="q-meta">
-      <div class="q-num">Tanong ${currentIdx + 1} / ${currentQs.length}</div>
-      <div class="q-timer-num" id="timerNum">${Math.ceil(timeLeft)}</div>
-    </div>
+function renderQuestion(){
+  clearInterval(timer);timeLeft=TIME_PER_Q;updateTimer();startTimer();
+  document.getElementById('qProgressFill').style.width=((cIdx/cQs.length)*100)+'%';
+  const q=cQs[cIdx],lv=LEVELS.find(l=>l.id===cLevelId),L=['A','B','C','D'];
+  document.getElementById('quizBody').innerHTML=`
+    <div class="q-meta"><div class="q-num">Q${cIdx+1} of ${cQs.length}</div><div class="q-timer-num" id="timerNum">${Math.ceil(timeLeft)}</div></div>
+    <div class="diff-badge ${lv.diff}">${lv.diff.toUpperCase()}</div>
     <div class="q-text fade-in">${q.q}</div>
     <div class="answers" id="answersArea">
-      ${q.o.map((opt, i) => `
-        <button class="answer-btn slide-up" style="animation-delay:${i*0.06}s" onclick="selectAnswer(${i})">
-          <span class="answer-letter">${letters[i]}</span>
-          <span>${opt}</span>
-        </button>
-      `).join('')}
-    </div>
-  `;
+      ${q.o.map((opt,i)=>`<button class="answer-btn slide-up" style="animation-delay:${i*.06}s" onclick="selectAnswer(${i})"><span class="answer-letter">${L[i]}</span><span>${opt}</span></button>`).join('')}
+    </div>`;
 }
 
-function selectAnswer(idx) {
+function selectAnswer(idx){
   clearInterval(timer);
-  const q = currentQs[currentIdx];
-  const btns = document.querySelectorAll('#answersArea .answer-btn');
-  const isCorrect = idx === q.c;
-
-  btns.forEach((btn, i) => {
-    btn.classList.add('disabled');
-    if (i === q.c) {
-      btn.classList.add('correct');
-      const s = document.createElement('span');
-      s.className = 'answer-status'; s.textContent = '✓';
-      btn.appendChild(s);
-    }
-    if (i === idx && !isCorrect) {
-      btn.classList.add('wrong');
-      const s = document.createElement('span');
-      s.className = 'answer-status'; s.textContent = '✗';
-      btn.appendChild(s);
-    }
+  const q=cQs[cIdx],btns=document.querySelectorAll('#answersArea .answer-btn'),ok=idx===q.c;
+  btns.forEach((b,i)=>{
+    b.classList.add('disabled');
+    if(i===q.c){b.classList.add('correct');const s=document.createElement('span');s.className='answer-status';s.textContent='✓';b.appendChild(s);}
+    if(i===idx&&!ok){b.classList.add('wrong');const s=document.createElement('span');s.className='answer-status';s.textContent='✗';b.appendChild(s);}
   });
-
-  if (isCorrect) {
+  if(ok){
     playCorrectSound();
-    const timeBonus = Math.ceil(timeLeft / TIME_PER_Q * 5);
-    const points = 10 + timeBonus;
-    score += points;
-    correctCount++;
-    streak++;
-    maxStreak = Math.max(maxStreak, streak);
-    playStreakSound(streak);
-    document.getElementById('quizScore').textContent = score;
-    renderStreakBar();
-    // Score popup
-    showScorePopup(`+${points}`);
-  } else {
-    playWrongSound();
-    streak = 0;
-    renderStreakBar();
-  }
-
-  const body = document.getElementById('quizBody');
-  const expDiv = document.createElement('div');
-  expDiv.className = 'explanation-box';
-  expDiv.innerHTML = `💡 ${q.e}`;
-  body.querySelector('.answers').after(expDiv);
-  addNextBtn(body);
+    const lv=LEVELS.find(l=>l.id===cLevelId);
+    const tb=Math.ceil(timeLeft/TIME_PER_Q*5),db={easy:0,normal:5,hard:12}[lv.diff]||0;
+    const pts=10+tb+db;
+    cScore+=pts;cCorrect++;cStreak++;cMaxStreak=Math.max(cMaxStreak,cStreak);
+    document.getElementById('quizScore').textContent=cScore;
+    renderStreakBar();showScorePopup(`+${pts}`);
+  }else{playWrongSound();cStreak=0;renderStreakBar();}
+  const body=document.getElementById('quizBody');
+  const exp=document.createElement('div');exp.className='explanation-box';exp.innerHTML=`💡 ${q.e}`;
+  body.querySelector('.answers').after(exp);addNextBtn(body);
 }
 
-function showScorePopup(text) {
-  const quizEl = document.getElementById('quiz');
-  const popup = document.createElement('div');
-  popup.className = 'score-popup';
-  popup.textContent = text;
-  popup.style.left = (Math.random() * 40 + 30) + '%';
-  popup.style.top = '60%';
-  quizEl.appendChild(popup);
-  setTimeout(() => popup.remove(), 900);
+function timeUp(){
+  clearInterval(timer);playWrongSound();cStreak=0;renderStreakBar();
+  const q=cQs[cIdx],btns=document.querySelectorAll('#answersArea .answer-btn');
+  btns.forEach((b,i)=>{b.classList.add('disabled');if(i===q.c){b.classList.add('correct');const s=document.createElement('span');s.className='answer-status';s.textContent='✓';b.appendChild(s);}});
+  const body=document.getElementById('quizBody');
+  const exp=document.createElement('div');exp.className='explanation-box timeout-exp';
+  exp.innerHTML=`⏰ <b>Naubos ang oras!</b> Sagot: <b>${q.o[q.c]}</b><br>💡 ${q.e}`;
+  body.querySelector('.answers').after(exp);addNextBtn(body);
 }
 
-function addNextBtn(body) {
-  const nextBtn = document.createElement('button');
-  nextBtn.className = 'next-btn slide-up';
-  nextBtn.textContent = currentIdx < currentQs.length - 1 ? 'Susunod na Tanong →' : 'Tingnan ang Results →';
-  nextBtn.onclick = () => {
-    playClickSound();
-    currentIdx++;
-    if (currentIdx < currentQs.length) renderQuestion();
-    else endQuiz();
-  };
-  body.appendChild(nextBtn);
+function addNextBtn(body){
+  const btn=document.createElement('button');
+  btn.className='next-btn slide-up';
+  btn.textContent=cIdx<cQs.length-1?'Susunod →':'Tingnan ang Results →';
+  btn.onclick=()=>{playClickSound();cIdx++;if(cIdx<cQs.length)renderQuestion();else endQuiz();};
+  body.appendChild(btn);
 }
 
-function timeUp() {
+function renderStreakBar(){
+  const bar=document.getElementById('streakBar');
+  if(cStreak===0){bar.innerHTML='<span style="opacity:.4;font-size:11px">Answer correctly to build a streak!</span>';return;}
+  const dots=Array.from({length:5},(_,i)=>`<div class="streak-dot ${i<cStreak%5||cStreak>=5?'lit':''}"></div>`).join('');
+  bar.innerHTML=`<span>${cStreak>=3?'🔥':''} Streak: ${cStreak}</span>${dots}`;
+}
+
+function showScorePopup(text){
+  const el=document.getElementById('quiz');
+  const p=document.createElement('div');p.className='score-popup';p.textContent=text;
+  p.style.left=(Math.random()*40+30)+'%';p.style.top='55%';
+  el.appendChild(p);setTimeout(()=>p.remove(),900);
+}
+
+function startTimer(){timer=setInterval(()=>{timeLeft-=.1;if(timeLeft<=0){timeLeft=0;timeUp();}updateTimer();},100);}
+function updateTimer(){
+  const fill=document.getElementById('timerFill'),num=document.getElementById('timerNum');
+  const pct=(timeLeft/TIME_PER_Q)*100;
+  if(fill){fill.style.width=pct+'%';fill.classList.toggle('warning',timeLeft<=4);}
+  if(num){num.textContent=Math.ceil(timeLeft);num.classList.toggle('warning',timeLeft<=4);}
+}
+
+// ============================================================
+// END QUIZ / RESULTS
+// ============================================================
+function endQuiz(){
   clearInterval(timer);
-  playWrongSound();
-  streak = 0;
-  renderStreakBar();
-
-  const q = currentQs[currentIdx];
-  const btns = document.querySelectorAll('#answersArea .answer-btn');
-  btns.forEach((btn, i) => {
-    btn.classList.add('disabled');
-    if (i === q.c) {
-      btn.classList.add('correct');
-      const s = document.createElement('span');
-      s.className = 'answer-status'; s.textContent = '✓';
-      btn.appendChild(s);
-    }
-  });
-
-  const body = document.getElementById('quizBody');
-  const expDiv = document.createElement('div');
-  expDiv.className = 'explanation-box timeout-exp';
-  expDiv.innerHTML = `⏰ <b>Naubos ang oras!</b> Tamang sagot: <b>${q.o[q.c]}</b><br>💡 ${q.e}`;
-  body.querySelector('.answers').after(expDiv);
-  addNextBtn(body);
-}
-
-// ===== TIMER =====
-function startTimer() {
-  timer = setInterval(() => {
-    timeLeft -= 0.1;
-    if (timeLeft <= 0) { timeLeft = 0; timeUp(); }
-    updateTimer();
-  }, 100);
-}
-function updateTimer() {
-  const fill = document.getElementById('timerFill');
-  const numEl = document.getElementById('timerNum');
-  const pct = (timeLeft / TIME_PER_Q) * 100;
-  fill.style.width = pct + '%';
-  const warn = timeLeft <= 5;
-  fill.classList.toggle('warning', warn);
-  if (numEl) {
-    numEl.textContent = Math.ceil(timeLeft);
-    numEl.classList.toggle('warning', warn);
-  }
-}
-
-// ===== RESULTS =====
-function endQuiz() {
-  clearInterval(timer);
-
-  const previousBest = bestScores[currentCat] || 0;
-  const isNewBest = score > previousBest;
-  if (isNewBest) bestScores[currentCat] = score;
-
-  const stars = correctCount >= 9 ? 3 : correctCount >= 7 ? 2 : correctCount >= 4 ? 1 : 0;
-  if ((bestStars[currentCat] || 0) < stars) bestStars[currentCat] = stars;
-  saveBest();
-
-  const pct = Math.round((correctCount / currentQs.length) * 100);
-
-  const msgs = [
-    ['PERFECT! Pinoy genius ka! 🎉', 'Zero mistakes — ika-memorya mo ang buong Pilipinas!'],
-    ['Magaling! Tunay kang Pinoy! 🌟', 'Konti na lang at perfect. Kaya mo pa!'],
-    ['Hindi naman masama! 📚', 'Practice lang nang practice. Hanggang sa susunod!'],
-    ['Kaya mo pa yan! Ulitin! 💪', 'Warm-up pa lang ito. Piling category at bumawi!'],
-    ['Ay sus! Aral muna tayo! 😅', 'Okay lang — every round is a chance to learn something new.']
+  const lv=LEVELS.find(l=>l.id===cLevelId);
+  const pct=Math.round((cCorrect/cQs.length)*100);
+  const stars=cCorrect>=9?3:cCorrect>=6?2:cCorrect>=4?1:0;
+  const xpBase={easy:15,normal:25,hard:40}[lv.diff]||15;
+  const xpBonus=cMaxStreak>=5?20:cMaxStreak>=3?10:0;
+  const xpGained=Math.round(xpBase*cCorrect+xpBonus);
+  const prevXp=S.totalXp,prevRank=getRank(prevXp);
+  S.totalXp+=xpGained;
+  const newRank=getRank(S.totalXp),rankedUp=newRank.name!==prevRank.name;
+  const prev=S.lp[lv.id]||{stars:0,score:0};
+  const isNewBest=cScore>(prev.score||0);
+  S.lp[lv.id]={stars:Math.max(stars,prev.stars||0),score:Math.max(cScore,prev.score||0),completed:stars>0};
+  if(isNewBest)S.bestScores[lv.id]=cScore;
+  const playerEntry={name:"Ikaw (You)",xp:S.totalXp,rank:newRank.name,date:"Ngayon"};
+  const pi=S.lb.findIndex(e=>e.name==="Ikaw (You)");
+  if(pi>=0)S.lb[pi]=playerEntry;else S.lb.push(playerEntry);
+  S.lb.sort((a,b)=>b.xp-a.xp);
+  saveS();
+  const nextLv=LEVELS.find(l=>l.id===cLevelId+1);
+  const justUnlocked=nextLv&&stars>0&&!(S.lp[nextLv.id]?.stars>0);
+  const msgs=[
+    ['PERFECT! Henyo ka talaga!','Zero mistakes — pinakamataas ang antas!'],
+    ['Magaling! Tunay kang Pinoy!','Konti na lang at perfect. Kaya mo!'],
+    ['Okay naman! Konting aral pa!','Practice lang. Mas mataas sa susunod!'],
+    ['Kaya mo pa! Ulitin!','Warm-up lang ito. Bumawi ka na!'],
+    ['Ay sus! Aral muna tayo!','Every round is a chance to learn!'],
   ];
-  const [msg, submsg] = pct === 100 ? msgs[0] : pct >= 80 ? msgs[1] : pct >= 60 ? msgs[2] : pct >= 40 ? msgs[3] : msgs[4];
-
-  const titleEl = document.getElementById('resultsTitle');
-  titleEl.textContent = pct === 100 ? '🏆 PERFECT!' : pct >= 80 ? '🌟 Magaling!' : 'Game Over!';
-
-  document.getElementById('resultsCatLabel').textContent = QUESTIONS[currentCat].icon + ' ' + currentCat;
-
-  const starsHtml = [0,1,2].map((i) =>
-    `<div class="rstar ${i < stars ? 'earned' : 'empty'}" style="animation-delay:${0.4+i*0.15}s"></div>`
-  ).join('');
-
-  const body = document.getElementById('resultsBody');
-  body.innerHTML = `
-    <div class="score-circle">
-      <div class="score-num">${score}</div>
-      <div class="score-label">POINTS</div>
-    </div>
-    ${isNewBest ? `<div class="best-badge">🏆 New Best Score!</div>` :
-      (previousBest > 0 ? `<div class="result-submsg" style="margin-top:0">Previous best: <strong>${previousBest}</strong></div>` : '')}
-    <div class="result-stars">${starsHtml}</div>
+  const [msg,sub]=pct===100?msgs[0]:pct>=80?msgs[1]:pct>=60?msgs[2]:pct>=40?msgs[3]:msgs[4];
+  document.getElementById('resultsTitle').textContent=pct===100?'PERFECT!':pct>=80?'Magaling!':'Game Over!';
+  document.getElementById('resultsCatLabel').textContent=`${lv.icon} Lvl ${lv.id}: ${lv.name}`;
+  const sh=[0,1,2].map(i=>`<div class="rstar ${i<stars?'earned':'empty'}" style="animation-delay:${.4+i*.15}s"></div>`).join('');
+  document.getElementById('resultsBody').innerHTML=`
+    <div class="score-circle"><div class="score-num">${cScore}</div><div class="score-label">POINTS</div></div>
+    ${isNewBest?`<div class="best-badge">🏆 New Best Score!</div>`:''}
+    <div class="xp-gain">+${xpGained} XP earned!</div>
+    <div class="result-stars">${sh}</div>
+    ${rankedUp?`<div class="rank-up-banner"><div class="ru-title">RANK UP! ${newRank.icon}</div><div class="ru-sub">You are now a <strong>${newRank.name}</strong>!</div></div>`:''}
     <div class="result-stats">
-      <div class="stat-item"><div class="stat-val">${correctCount}/10</div><div class="stat-lbl">TAMA</div></div>
+      <div class="stat-item"><div class="stat-val">${cCorrect}/10</div><div class="stat-lbl">TAMA</div></div>
       <div class="stat-item"><div class="stat-val">${pct}%</div><div class="stat-lbl">ACCURACY</div></div>
-      <div class="stat-item"><div class="stat-val">${maxStreak}🔥</div><div class="stat-lbl">BEST STREAK</div></div>
+      <div class="stat-item"><div class="stat-val">${cMaxStreak}🔥</div><div class="stat-lbl">MAX STREAK</div></div>
     </div>
     <div class="result-msg">${msg}</div>
-    <div class="result-submsg">${submsg}</div>
+    <div class="result-submsg">${sub}</div>
     <div class="result-actions">
-      <button class="btn-play" onclick="playClickSound(); startQuiz('${currentCat}')">Laro Ulit!</button>
-      <button class="btn-secondary" onclick="playClickSound(); shareScore()">I-share ang Score</button>
-      <button class="btn-secondary" onclick="playClickSound(); showScreen('categories')">Ibang Category</button>
-      <button class="btn-secondary" onclick="playClickSound(); showScreen('menu')">Main Menu</button>
-    </div>
-  `;
+      <button class="btn-play" onclick="playClickSound();startQuiz(${cLevelId})">Laro Ulit!</button>
+      <button class="btn-secondary" onclick="playClickSound();showScreen('mapscreen')">Back to Map</button>
+      <button class="btn-secondary" onclick="playClickSound();shareScore()">I-share ang Score</button>
+      <button class="btn-secondary" onclick="playClickSound();showScreen('menu')">Main Menu</button>
+    </div>`;
   showScreen('results');
+  if(rankedUp)setTimeout(playRankUpSound,400);
+  if(justUnlocked&&stars>0)setTimeout(()=>showUnlockOverlay(nextLv),1200);
 }
 
-// ===== SHARE =====
-function shareScore() {
-  const starEmoji = ['', '⭐', '⭐⭐', '⭐⭐⭐'][(bestStars[currentCat]||0)];
-  const text = `${starEmoji} I scored ${score} pts in "${currentCat}" on Alam Mo Ba?! Pinoy Quiz! Can you beat me? 🇵🇭`;
-  if (navigator.share) {
-    navigator.share({ title: 'Alam Mo Ba?!', text, url: window.location.href }).catch(()=>{});
-  } else if (navigator.clipboard) {
-    navigator.clipboard.writeText(`${text} ${window.location.href}`)
-      .then(() => alert('Score copied! I-paste mo na sa chat mo!'))
-      .catch(() => alert(text));
-  } else { alert(text); }
+function showUnlockOverlay(lv){
+  playUnlockSound();
+  const topicName={history:'Philippine History',food:'Filipino Food',culture:'Philippine Culture',geo:'Philippine Geography',popculture:'Pinoy Pop Culture'}[lv.topic]||lv.topic;
+  const overlay=document.createElement('div');overlay.className='unlock-overlay';
+  overlay.innerHTML=`<div class="unlock-card"><span class="unlock-emoji">${lv.icon}</span><div class="unlock-title">Level Unlocked!</div><div class="unlock-sub"><strong>Level ${lv.id}: ${lv.name}</strong><br>${lv.region.charAt(0).toUpperCase()+lv.region.slice(1)} Region<br>Topic: ${topicName}</div><button class="btn-play" onclick="this.closest('.unlock-overlay').remove()">Awesome!</button></div>`;
+  document.getElementById('results').appendChild(overlay);
 }
 
-// ===== UTILITY =====
-function shuffleArray(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-function resetScores() {
-  playClickSound();
-  if (confirm('I-reset lahat ng scores at stars? Sure ka ba?')) {
-    bestScores = {}; bestStars = {};
-    saveBest(); updateMenu();
-  }
+// ============================================================
+// LEADERBOARD
+// ============================================================
+function renderLeaderboard(){
+  const body=document.getElementById('lbBody');
+  const sorted=[...S.lb].sort((a,b)=>b.xp-a.xp);
+  const rc=['gold','silver','bronze'];
+  body.innerHTML=`<div class="lb-section-title">🏆 Top Pinoy Trivia Masters</div>`+
+    sorted.map((e,i)=>{
+      const isYou=e.name==="Ikaw (You)",rank=getRank(e.xp);
+      return `<div class="lb-row ${isYou?'lb-you':''} slide-up" style="animation-delay:${i*.06}s"><div class="lb-rank-num ${rc[i]||''}">${i+1}</div><div class="lb-info"><div class="lb-name">${e.name}${isYou?' (You)':''}</div><div class="lb-detail">${rank.icon} ${rank.name} • ${e.date||''}</div></div><div class="lb-score">${e.xp.toLocaleString()} XP</div></div>`;
+    }).join('');
 }
 
-// Init
-updateMenu();
-updateOfflineBanner();
-updateSoundToggleUI();
-window.addEventListener('online', updateOfflineBanner);
-window.addEventListener('offline', updateOfflineBanner);
-document.addEventListener('pointerdown', () => {
-  try { const ctx = getAudioCtx(); if (ctx.state === 'suspended') ctx.resume(); } catch(e) {}
-}, { once: true });
+// ============================================================
+// UTILS
+// ============================================================
+function shareScore(){
+  const lv=LEVELS.find(l=>l.id===cLevelId);
+  const rank=getRank(S.totalXp);
+  const text=`I scored ${cScore} pts on Level ${lv?.id} (${lv?.name}) — Alam Mo Ba?! Pinoy Quiz! I'm a ${rank.icon} ${rank.name} with ${S.totalXp} XP. Subukan mo rin! 🇵🇭`;
+  if(navigator.share){navigator.share({title:'Alam Mo Ba?!',text,url:window.location.href}).catch(()=>{});}
+  else if(navigator.clipboard){navigator.clipboard.writeText(`${text} ${window.location.href}`).then(()=>alert('Score copied!')).catch(()=>alert(text));}
+  else alert(text);
+}
+function shuffle(arr){const a=[...arr];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function resetAll(){playClickSound();if(confirm('I-reset lahat ng progress, XP, at stars? Hindi na mababawi!')){S={totalXp:0,lp:{},bestScores:{},lb:[]};saveS();loadS();renderMenu();}}
+function updateOfflineBanner(){const b=document.getElementById('offlineBanner');if(!navigator.onLine)b.classList.add('show');else b.classList.remove('show');}
+
+// INIT
+loadS();renderMenu();updateOfflineBanner();updateSndUI();
+window.addEventListener('online',updateOfflineBanner);
+window.addEventListener('offline',updateOfflineBanner);
+document.addEventListener('pointerdown',()=>{try{const ctx=getActx();if(ctx.state==='suspended')ctx.resume();}catch(e){}},{once:true});
 </script>
-
 <script>
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("./sw.js")
-      .then(reg => console.log("SW registered:", reg.scope))
-      .catch(err => console.log("SW failed:", err));
-  });
-}
+if("serviceWorker"in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("./sw.js").then(r=>console.log("SW:",r.scope)).catch(e=>console.log("SW failed:",e));});}
 </script>
 </body>
 </html>
