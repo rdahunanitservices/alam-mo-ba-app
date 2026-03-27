@@ -1,46 +1,21 @@
 {
-  "background_color": "#0038a8",
-  "description": "Test your Pinoy knowledge! 50 trivia questions about Philippine history, food, culture, geography, and pop culture.",
-  "dir": "ltr",
-  "display": "fullscreen",
   "name": "Alam Mo Ba?! Pinoy Quiz",
-  "orientation": "portrait",
-  "scope": "/",
   "short_name": "Alam Mo Ba",
-  "start_url": "./",
-  "theme_color": "#0038a8",
+  "description": "Test your Pinoy knowledge! 50 trivia questions about Philippine history, food, culture, geography, and pop culture.",
+  "id": "/alam-mo-ba-app/",
+  "start_url": "/alam-mo-ba-app/",
+  "scope": "/alam-mo-ba-app/",
+  "display": "fullscreen",
+  "background_color": "#0038A8",
+  "theme_color": "#0038A8",
+  "orientation": "portrait",
+  "lang": "en",
+  "categories": ["education", "entertainment", "games"],
   "icons": [
     {
-      "src": "https://tiiny.host/assets/logo-purple-bg.png",
-      "type": "image/png",
-      "sizes": "1501x1501",
-      "isSquare": true,
-      "isPng": true,
-      "isWebp": false,
-      "isJpg": false,
-      "width": 1501,
-      "is512x512": false,
-      "is256x256": false,
-      "is192x192": false
-    },
-    {
-      "src": "https://alam-mo-ba.tiiny.site/favicon.ico",
-      "type": "image/x-icon",
-      "isSquare": false,
-      "isPng": false,
-      "isWebp": false,
-      "isJpg": false,
-      "width": 0,
-      "is512x512": false,
-      "is256x256": false,
-      "is192x192": false
+      "src": "app-icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
-  ],
-  "categories": [
-    "education",
-    "entertainment",
-    "games"
-  ],
-  "id": "/?source=pwa",
-  "lang": "tl"
+  ]
 }
