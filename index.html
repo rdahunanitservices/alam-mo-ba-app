@@ -12,8 +12,7 @@
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
   --blue:#0038A8;--blue-dark:#002880;--blue-light:#1a5cc8;
-  --red:#CE1126;--red-dark:#a00d1e;--red-glow:#ff2a44;
-  --gold:#FCD116;--gold-dark:#dab510;--gold-glow:#ffe44d;
+  --red:#CE1126;--red-dark:#a00d1e;--gold:#FCD116;--gold-dark:#dab510;
   --white:#FAFAF8;--cream:#FFF8EC;
   --text-dark:#1a1a2e;--text-mid:#555;--text-light:#888;
 }
@@ -36,7 +35,6 @@ body{
   text-align:center;
   font-size:12px;
   font-weight:800;
-  letter-spacing:0.2px;
   padding:10px 14px;
   border-bottom:1px solid #f2d675;
   z-index:5;
@@ -49,7 +47,10 @@ body{
   padding:20px 20px 16px;text-align:center;position:relative;
   flex-shrink:0;
 }
-.header-bar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--red)}
+.header-bar::after{
+  content:'';
+  position:absolute;bottom:0;left:0;right:0;height:4px;background:var(--red)
+}
 .screen{display:none;flex-direction:column;height:100%;overflow:hidden}
 .screen.active{display:flex}
 .scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
@@ -57,9 +58,18 @@ body{
 /* ===== MAIN MENU ===== */
 #menu .header-bar{padding:30px 20px 24px}
 .menu-stars{display:flex;gap:8px;justify-content:center;margin-bottom:6px}
-.menu-star{width:16px;height:16px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
-.menu-title{font-family:'Fredoka',sans-serif;font-size:32px;font-weight:700;color:var(--gold);text-shadow:2px 2px 0 rgba(0,0,0,0.2)}
-.menu-subtitle{font-size:14px;color:rgba(255,255,255,0.85);letter-spacing:1.5px;font-weight:600;margin-top:2px}
+.menu-star{
+  width:16px;height:16px;background:var(--gold);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)
+}
+.menu-title{
+  font-family:'Fredoka',sans-serif;font-size:32px;font-weight:700;
+  color:var(--gold);text-shadow:2px 2px 0 rgba(0,0,0,0.2)
+}
+.menu-subtitle{
+  font-size:14px;color:rgba(255,255,255,0.85);
+  letter-spacing:1.5px;font-weight:600;margin-top:2px
+}
 .sun-badge{
   width:80px;height:80px;margin:24px auto 20px;position:relative;
   display:flex;align-items:center;justify-content:center;
@@ -71,16 +81,22 @@ body{
   box-shadow:0 0 30px rgba(252,209,22,0.4);
   animation:pulse 2s ease-in-out infinite;
 }
-@keyframes pulse{0%,100%{box-shadow:0 0 20px rgba(252,209,22,0.3)}50%{box-shadow:0 0 40px rgba(252,209,22,0.6)}}
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 20px rgba(252,209,22,0.3)}
+  50%{box-shadow:0 0 40px rgba(252,209,22,0.6)}
+}
 .sun-ray-ring{position:absolute;width:80px;height:80px;animation:spin 20s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-.sray{position:absolute;width:4px;height:12px;background:var(--gold);border-radius:2px;top:0;left:38px;transform-origin:center 40px}
+.sray{
+  position:absolute;width:4px;height:12px;background:var(--gold);
+  border-radius:2px;top:0;left:38px;transform-origin:center 40px
+}
 .menu-body{padding:24px;display:flex;flex-direction:column;align-items:center;gap:12px}
 .btn-play{
   width:220px;padding:16px;background:var(--red);color:#fff;border:none;border-radius:40px;
   font-family:'Fredoka',sans-serif;font-size:20px;font-weight:600;cursor:pointer;
   box-shadow:0 4px 0 var(--red-dark),0 6px 20px rgba(206,17,38,0.3);
-  transition:all 0.15s;position:relative;
+  transition:all 0.15s;
 }
 .btn-play:active{transform:translateY(3px);box-shadow:0 1px 0 var(--red-dark)}
 .btn-secondary{
@@ -90,12 +106,22 @@ body{
   transition:all 0.15s;
 }
 .btn-secondary:active{background:var(--blue);color:#fff}
-.menu-footer{margin-top:auto;padding:16px;text-align:center;font-size:11px;color:var(--text-light);line-height:1.6}
+.menu-footer{
+  margin-top:auto;padding:16px;text-align:center;
+  font-size:11px;color:var(--text-light);line-height:1.6
+}
 .highscore-badge{
   background:var(--cream);border:2px solid var(--gold);border-radius:12px;
   padding:8px 20px;font-size:13px;color:var(--blue);font-weight:700;margin-top:4px;
 }
 .highscore-badge span{color:var(--red);font-size:18px}
+.settings-row{
+  display:flex;gap:10px;justify-content:center;flex-wrap:wrap;width:100%;
+}
+.toggle-btn{
+  padding:10px 16px;border-radius:999px;border:2px solid var(--blue);
+  background:#fff;color:var(--blue);font-size:13px;font-weight:800;cursor:pointer;
+}
 
 /* ===== CATEGORY SELECT ===== */
 .cat-grid{padding:16px;display:flex;flex-direction:column;gap:10px}
@@ -123,14 +149,18 @@ body{
 }
 
 /* ===== QUIZ SCREEN ===== */
-#quiz .header-bar{padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+#quiz .header-bar{
+  padding:12px 16px;display:flex;justify-content:space-between;align-items:center
+}
 .quiz-cat-label{font-size:13px;color:#fff;font-weight:600}
 .quiz-score-pill{
   font-size:13px;color:var(--gold);font-weight:700;
   background:rgba(255,255,255,0.12);padding:4px 12px;border-radius:12px;
 }
 .timer-track{height:6px;background:#e8e4d8;flex-shrink:0}
-.timer-fill{height:100%;background:var(--gold);transition:width 0.3s linear;border-radius:0 3px 3px 0}
+.timer-fill{
+  height:100%;background:var(--gold);transition:width 0.3s linear;border-radius:0 3px 3px 0
+}
 .timer-fill.warning{background:var(--red)}
 .quiz-body{padding:20px;flex:1;display:flex;flex-direction:column}
 .q-progress{font-size:12px;color:var(--text-mid);margin-bottom:8px;font-weight:600}
@@ -146,24 +176,25 @@ body{
   transition:all 0.2s;position:relative;
 }
 .answer-btn:active:not(.disabled){transform:scale(0.98)}
-.answer-btn.selected{border-color:var(--blue);background:#EEF2FF;color:var(--blue)}
 .answer-btn.correct{border-color:#4CAF50;background:#E8F5E9;color:#2E7D32}
-.answer-btn.correct::after{content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px}
+.answer-btn.correct::after{
+  content:'✓';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px
+}
 .answer-btn.wrong{border-color:var(--red);background:#FFEBEE;color:var(--red-dark)}
-.answer-btn.wrong::after{content:'✗';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px}
+.answer-btn.wrong::after{
+  content:'✗';position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px
+}
 .answer-btn.disabled{pointer-events:none;opacity:0.6}
 .answer-btn.disabled.correct{opacity:1}
 .explanation-box{
   margin-top:16px;padding:12px 14px;background:#EEF7EE;border-radius:10px;
-  font-size:13px;color:#2E7D32;line-height:1.5;
-  animation:fadeUp 0.3s ease;
+  font-size:13px;color:#2E7D32;line-height:1.5;animation:fadeUp 0.3s ease;
 }
 @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .next-btn{
   margin-top:auto;padding:14px;background:var(--blue);color:#fff;
   border:none;border-radius:14px;font-family:'Fredoka',sans-serif;
-  font-size:16px;font-weight:600;cursor:pointer;
-  transition:all 0.15s;
+  font-size:16px;font-weight:600;cursor:pointer;transition:all 0.15s;
 }
 .next-btn:active{transform:scale(0.97)}
 
@@ -176,14 +207,17 @@ body{
   width:140px;height:140px;border-radius:50%;
   background:linear-gradient(135deg,var(--blue),var(--blue-light));
   display:flex;flex-direction:column;align-items:center;justify-content:center;
-  box-shadow:0 8px 30px rgba(0,56,168,0.3);
-  animation:scaleIn 0.5s ease;
+  box-shadow:0 8px 30px rgba(0,56,168,0.3);animation:scaleIn 0.5s ease;
 }
 @keyframes scaleIn{from{transform:scale(0.5);opacity:0}to{transform:scale(1);opacity:1}}
 .score-num{font-family:'Fredoka',sans-serif;font-size:42px;font-weight:700;color:var(--gold)}
 .score-label{font-size:12px;color:rgba(255,255,255,0.8);margin-top:-4px}
 .result-stars{display:flex;gap:8px;margin-top:4px}
-.rstar{width:36px;height:36px;clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);transition:all 0.3s}
+.rstar{
+  width:36px;height:36px;
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  transition:all 0.3s
+}
 .rstar.earned{background:var(--gold);animation:starPop 0.4s ease}
 .rstar.empty{background:#ddd}
 @keyframes starPop{0%{transform:scale(0)}50%{transform:scale(1.3)}100%{transform:scale(1)}}
@@ -202,12 +236,8 @@ body{
 }
 .best-badge{
   background:linear-gradient(135deg,var(--gold),#ffe88e);
-  color:var(--blue-dark);
-  font-weight:800;
-  font-size:13px;
-  padding:8px 14px;
-  border-radius:999px;
-  box-shadow:0 4px 12px rgba(252,209,22,0.35);
+  color:var(--blue-dark);font-weight:800;font-size:13px;
+  padding:8px 14px;border-radius:999px;box-shadow:0 4px 12px rgba(252,209,22,0.35);
 }
 .result-actions{display:flex;flex-direction:column;gap:10px;width:100%;margin-top:8px}
 .result-actions .btn-play{width:100%}
@@ -217,8 +247,7 @@ body{
 .ad-banner{
   flex-shrink:0;height:50px;background:#f5f0e5;
   display:flex;align-items:center;justify-content:center;
-  font-size:11px;color:#bbb;border-top:1px solid #e8e4d8;
-  letter-spacing:0.5px;
+  font-size:11px;color:#bbb;border-top:1px solid #e8e4d8;letter-spacing:0.5px;
 }
 
 /* ===== ANIMATIONS ===== */
@@ -264,8 +293,11 @@ body{
           <div class="sun-core">?!</div>
         </div>
         <div class="highscore-badge">Best Score: <span id="globalBest">0</span></div>
-        <button class="btn-play" onclick="showScreen('categories')">LARO NA!</button>
+        <button class="btn-play" onclick="playClickSound(); showScreen('categories')">LARO NA!</button>
         <button class="btn-secondary" onclick="resetScores()">Reset Scores</button>
+        <div class="settings-row">
+          <button id="soundToggle" class="toggle-btn" onclick="toggleSound()">Sound: ON</button>
+        </div>
       </div>
     </div>
     <div class="menu-footer">
@@ -285,7 +317,7 @@ body{
       <div class="cat-grid" id="catGrid"></div>
     </div>
     <div style="padding:12px 16px;flex-shrink:0">
-      <button class="btn-secondary" style="width:100%;text-align:center" onclick="showScreen('menu')">← Bumalik</button>
+      <button class="btn-secondary" style="width:100%;text-align:center" onclick="playClickSound(); showScreen('menu')">← Bumalik</button>
       <p style="text-align:center;font-size:12px;margin-top:10px;">
         <a href="privacy.html" target="_blank">Privacy Policy</a>
       </p>
@@ -412,6 +444,74 @@ let timer = null;
 let timeLeft = 15;
 const TIME_PER_Q = 15;
 let bestScores = {};
+let audioCtx = null;
+let soundEnabled = true;
+
+// ===== SOUND =====
+try {
+  soundEnabled = JSON.parse(localStorage.getItem('alamMoBaSound') ?? 'true');
+} catch(e) {
+  soundEnabled = true;
+}
+
+function saveSoundSetting() {
+  try { localStorage.setItem('alamMoBaSound', JSON.stringify(soundEnabled)); } catch(e) {}
+}
+
+function updateSoundToggleUI() {
+  const btn = document.getElementById('soundToggle');
+  if (btn) btn.textContent = soundEnabled ? 'Sound: ON' : 'Sound: OFF';
+}
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  saveSoundSetting();
+  updateSoundToggleUI();
+  if (soundEnabled) playClickSound();
+}
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq, duration, type='sine', volume=0.03, whenOffset=0) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    const now = ctx.currentTime + whenOffset;
+
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, now);
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.exponentialRampToValueAtTime(volume, now + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + duration + 0.02);
+  } catch(e) {}
+}
+
+function playClickSound() {
+  playTone(520, 0.05, 'triangle', 0.02);
+}
+
+function playCorrectSound() {
+  playTone(523.25, 0.10, 'triangle', 0.04, 0.00);
+  playTone(659.25, 0.10, 'triangle', 0.04, 0.08);
+  playTone(783.99, 0.12, 'triangle', 0.04, 0.16);
+}
+
+function playWrongSound() {
+  playTone(320, 0.12, 'sawtooth', 0.03, 0.00);
+  playTone(240, 0.14, 'sawtooth', 0.03, 0.10);
+}
 
 // Load saved scores
 try { bestScores = JSON.parse(localStorage.getItem('alamMoBaBest') || '{}'); } catch(e) {}
@@ -443,6 +543,7 @@ function showScreen(id) {
 
 function updateMenu() {
   document.getElementById('globalBest').textContent = getGlobalBest();
+  updateSoundToggleUI();
 }
 
 // ===== CATEGORIES =====
@@ -462,7 +563,10 @@ function renderCategories() {
       </div>
       ${best > 0 ? `<div class="cat-best">Best: ${best}</div>` : ''}
     `;
-    card.onclick = () => startQuiz(name);
+    card.onclick = () => {
+      playClickSound();
+      startQuiz(name);
+    };
     grid.appendChild(card);
   });
 }
@@ -515,11 +619,14 @@ function selectAnswer(idx) {
   });
 
   if(isCorrect) {
+    playCorrectSound();
     const timeBonus = Math.ceil(timeLeft / TIME_PER_Q * 5);
     const points = 10 + timeBonus;
     score += points;
     correctCount++;
     document.getElementById('quizScore').textContent = score;
+  } else {
+    playWrongSound();
   }
 
   const body = document.getElementById('quizBody');
@@ -532,18 +639,18 @@ function selectAnswer(idx) {
   nextBtn.className = 'next-btn slide-up';
   nextBtn.textContent = currentIdx < currentQs.length - 1 ? 'Susunod →' : 'Tingnan ang Results →';
   nextBtn.onclick = () => {
+    playClickSound();
     currentIdx++;
-    if(currentIdx < currentQs.length) {
-      renderQuestion();
-    } else {
-      endQuiz();
-    }
+    if(currentIdx < currentQs.length) renderQuestion();
+    else endQuiz();
   };
   body.appendChild(nextBtn);
 }
 
 function timeUp() {
   clearInterval(timer);
+  playWrongSound();
+
   const q = currentQs[currentIdx];
   const btns = document.querySelectorAll('#answersArea .answer-btn');
   btns.forEach((btn, i) => {
@@ -563,6 +670,7 @@ function timeUp() {
   nextBtn.className = 'next-btn slide-up';
   nextBtn.textContent = currentIdx < currentQs.length - 1 ? 'Susunod →' : 'Tingnan ang Results →';
   nextBtn.onclick = () => {
+    playClickSound();
     currentIdx++;
     if(currentIdx < currentQs.length) renderQuestion();
     else endQuiz();
@@ -641,10 +749,10 @@ function endQuiz() {
     <div class="result-msg">${msg}</div>
     <div class="result-submsg">${submsg}</div>
     <div class="result-actions">
-      <button class="btn-play" onclick="startQuiz('${currentCat}')">Laro Ulit!</button>
-      <button class="btn-secondary" onclick="shareScore()">Share Score</button>
-      <button class="btn-secondary" onclick="showScreen('categories')">Ibang Category</button>
-      <button class="btn-secondary" onclick="showScreen('menu')">Main Menu</button>
+      <button class="btn-play" onclick="playClickSound(); startQuiz('${currentCat}')">Laro Ulit!</button>
+      <button class="btn-secondary" onclick="playClickSound(); shareScore()">Share Score</button>
+      <button class="btn-secondary" onclick="playClickSound(); showScreen('categories')">Ibang Category</button>
+      <button class="btn-secondary" onclick="playClickSound(); showScreen('menu')">Main Menu</button>
     </div>
   `;
   showScreen('results');
@@ -680,6 +788,7 @@ function shuffleArray(arr) {
 }
 
 function resetScores() {
+  playClickSound();
   if(confirm('I-reset lahat ng scores? Sure ka ba?')) {
     bestScores = {};
     saveBest();
@@ -690,9 +799,20 @@ function resetScores() {
 // Init
 updateMenu();
 updateOfflineBanner();
+updateSoundToggleUI();
+
 window.addEventListener('online', updateOfflineBanner);
 window.addEventListener('offline', updateOfflineBanner);
+
+// Enable audio on first interaction
+document.addEventListener('pointerdown', () => {
+  try {
+    const ctx = getAudioCtx();
+    if (ctx.state === 'suspended') ctx.resume();
+  } catch(e) {}
+}, { once:true });
 </script>
+
 <script>
 if ("serviceWorker" in navigator) {
   window.addEventListener("load", () => {
