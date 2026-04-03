@@ -5,10 +5,12 @@ export function useTimer(duration, onTimeUp) {
   const [running, setRunning] = useState(false);
   const intervalRef = useRef(null);
   const callbackRef = useRef(onTimeUp);
+  const maxTimeRef = useRef(duration);
 
   callbackRef.current = onTimeUp;
 
   const start = useCallback(() => {
+    maxTimeRef.current = duration;
     setTimeLeft(duration);
     setRunning(true);
   }, [duration]);
@@ -22,6 +24,15 @@ export function useTimer(duration, onTimeUp) {
     stop();
     setTimeLeft(duration);
   }, [duration, stop]);
+
+  // Add extra seconds (for power-up)
+  const addTime = useCallback((seconds) => {
+    setTimeLeft((prev) => {
+      const newTime = prev + seconds;
+      maxTimeRef.current = Math.max(maxTimeRef.current, newTime);
+      return newTime;
+    });
+  }, []);
 
   useEffect(() => {
     if (!running) return;
@@ -40,8 +51,8 @@ export function useTimer(duration, onTimeUp) {
     return () => clearInterval(intervalRef.current);
   }, [running]);
 
-  const pct = (timeLeft / duration) * 100;
+  const pct = (timeLeft / maxTimeRef.current) * 100;
   const isWarning = timeLeft <= 4;
 
-  return { timeLeft, pct, isWarning, start, stop, reset, running };
+  return { timeLeft, pct, isWarning, start, stop, reset, addTime, running };
 }

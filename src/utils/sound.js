@@ -53,4 +53,30 @@ export const sounds = {
   rankUp: () => {
     [440, 554, 659, 880].forEach((f, i) => tone(f, 0.15, "triangle", 0.05, i * 0.08));
   },
+  // Power-up sounds
+  powerup: () => {
+    tone(880, 0.08, "sine", 0.04, 0);
+    tone(1100, 0.08, "sine", 0.04, 0.06);
+    tone(1320, 0.12, "sine", 0.04, 0.12);
+  },
+  fiftyFifty: () => {
+    tone(660, 0.1, "triangle", 0.04, 0);
+    tone(880, 0.15, "triangle", 0.04, 0.08);
+  },
+  skip: () => {
+    tone(440, 0.06, "sine", 0.03, 0);
+    tone(660, 0.06, "sine", 0.03, 0.05);
+    tone(880, 0.06, "sine", 0.03, 0.1);
+  },
+  extraTime: () => {
+    tone(523, 0.1, "sine", 0.04, 0);
+    tone(523, 0.1, "sine", 0.04, 0.12);
+    tone(784, 0.15, "sine", 0.04, 0.24);
+  },
+  achievement: () => {
+    [523, 659, 784, 1047, 1319].forEach((f, i) => tone(f, 0.12, "triangle", 0.04, i * 0.07));
+  },
+  dailyComplete: () => {
+    [440, 554, 659, 880, 1047].forEach((f, i) => tone(f, 0.15, "triangle", 0.05, i * 0.1));
+  },
 };

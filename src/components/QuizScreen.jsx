@@ -24,18 +24,57 @@ function StreakBar({ streak }) {
   );
 }
 
+function PowerupBar({ powerups, onFiftyFifty, onSkip, onExtraTime, disabled }) {
+  return (
+    <div className="powerup-bar">
+      <button
+        className={`powerup-btn fifty-fifty ${powerups.fiftyFifty <= 0 ? "empty" : ""}`}
+        onClick={onFiftyFifty}
+        disabled={disabled || powerups.fiftyFifty <= 0}
+        title="50/50 — Remove 2 wrong answers"
+      >
+        <span className="pu-icon">½</span>
+        <span className="pu-count">{powerups.fiftyFifty}</span>
+      </button>
+      <button
+        className={`powerup-btn skip-btn ${powerups.skip <= 0 ? "empty" : ""}`}
+        onClick={onSkip}
+        disabled={disabled || powerups.skip <= 0}
+        title="Skip — Skip without penalty"
+      >
+        <span className="pu-icon">⏭️</span>
+        <span className="pu-count">{powerups.skip}</span>
+      </button>
+      <button
+        className={`powerup-btn extra-time ${powerups.extraTime <= 0 ? "empty" : ""}`}
+        onClick={onExtraTime}
+        disabled={disabled || powerups.extraTime <= 0}
+        title="Extra Time — Add 10 seconds"
+      >
+        <span className="pu-icon">⏱️</span>
+        <span className="pu-count">{powerups.extraTime}</span>
+      </button>
+    </div>
+  );
+}
+
 export default function QuizScreen() {
   const store = useGameStore();
   const {
     currentLevelId, quizQuestions, quizIndex, quizScore, quizStreak,
     quizAnswered, soundEnabled, answerQuestion, nextQuestion, endQuiz,
+    powerups, hiddenAnswers, skippedQuestion, isDaily,
+    useFiftyFifty, useSkip, useExtraTime,
   } = store;
 
   const [scorePopups, setScorePopups] = useState([]);
   const [timedOut, setTimedOut] = useState(false);
+  const [powerupFlash, setPowerupFlash] = useState(null);
 
-  const lv = levels.find((l) => l.id === currentLevelId);
-  const timePerQ = DIFF_CONFIG[lv?.diff]?.time || 15;
+  const lv = !isDaily ? levels.find((l) => l.id === currentLevelId) : null;
+  const timePerQ = isDaily
+    ? store.quizQuestions[0]?._timePerQ || 10
+    : (DIFF_CONFIG[lv?.diff]?.time || 15);
   const q = quizQuestions[quizIndex];
 
   const onTimeUp = useCallback(() => {
@@ -45,14 +84,47 @@ export default function QuizScreen() {
     answerQuestion(-1, 0, false);
   }, [quizAnswered, timedOut, soundEnabled, answerQuestion]);
 
-  const { timeLeft, pct: timerPct, isWarning, start, stop, reset } = useTimer(timePerQ, onTimeUp);
+  const { timeLeft, pct: timerPct, isWarning, start, stop, addTime } = useTimer(timePerQ, onTimeUp);
 
-  // Start timer when question changes
   useEffect(() => {
     setTimedOut(false);
     start();
     return () => stop();
   }, [quizIndex, start, stop]);
+
+  const showPowerupFlash = (text) => {
+    setPowerupFlash(text);
+    setTimeout(() => setPowerupFlash(null), 1200);
+  };
+
+  const handleFiftyFifty = () => {
+    if (!q || quizAnswered) return;
+    const ok = useFiftyFifty(q.c);
+    if (ok) {
+      if (soundEnabled) sounds.fiftyFifty();
+      showPowerupFlash("50/50!");
+    }
+  };
+
+  const handleSkip = () => {
+    if (!q || quizAnswered) return;
+    const ok = useSkip();
+    if (ok) {
+      stop();
+      if (soundEnabled) sounds.skip();
+      showPowerupFlash("Skipped!");
+    }
+  };
+
+  const handleExtraTime = () => {
+    if (!q || quizAnswered) return;
+    const ok = useExtraTime();
+    if (ok) {
+      addTime(10);
+      if (soundEnabled) sounds.extraTime();
+      showPowerupFlash("+10s!");
+    }
+  };
 
   const handleAnswer = (idx) => {
     if (quizAnswered) return;
@@ -62,11 +134,10 @@ export default function QuizScreen() {
     if (isCorrect) {
       if (soundEnabled) sounds.correct();
       const tb = Math.ceil((timeLeft / timePerQ) * 5);
-      const db = DIFF_CONFIG[lv.diff]?.bonus || 0;
+      const db = isDaily ? 5 : (DIFF_CONFIG[lv?.diff]?.bonus || 0);
       const pts = 10 + tb + db;
       answerQuestion(idx, pts, true);
 
-      // Score popup
       const id = Date.now();
       setScorePopups((p) => [...p, { id, text: `+${pts}`, left: Math.random() * 40 + 30 }]);
       setTimeout(() => setScorePopups((p) => p.filter((s) => s.id !== id)), 900);
@@ -85,15 +156,19 @@ export default function QuizScreen() {
     }
   };
 
-  if (!q || !lv) return null;
+  if (!q) return null;
 
   const selectedAnswer = store.selectedAnswer;
   const isLast = quizIndex >= quizQuestions.length - 1;
+  const diff = isDaily ? "normal" : lv?.diff || "easy";
+  const headerLabel = isDaily
+    ? "📅 Daily Challenge"
+    : `${lv?.icon} Lvl ${lv?.id}: ${lv?.name}`;
 
   return (
     <>
       <div className="header-bar quiz-header">
-        <div className="quiz-cat-label">{lv.icon} Lvl {lv.id}: {lv.name}</div>
+        <div className="quiz-cat-label">{headerLabel}</div>
         <div className="quiz-score-pill">★ {quizScore}</div>
       </div>
 
@@ -116,35 +191,59 @@ export default function QuizScreen() {
             </div>
           </div>
 
-          <div className={`diff-badge ${lv.diff}`}>{lv.diff.toUpperCase()}</div>
+          <div className={`diff-badge ${diff}`}>{diff.toUpperCase()}</div>
           <div className="q-text">{q.q}</div>
+
+          {/* Power-ups */}
+          <PowerupBar
+            powerups={powerups}
+            onFiftyFifty={handleFiftyFifty}
+            onSkip={handleSkip}
+            onExtraTime={handleExtraTime}
+            disabled={quizAnswered}
+          />
 
           <div className="answers">
             {q.o.map((opt, i) => {
+              const isHidden = hiddenAnswers.includes(i);
               let cls = "answer-btn";
-              if (quizAnswered) {
+              if (isHidden) cls += " hidden-answer";
+              if (quizAnswered && !skippedQuestion) {
                 cls += " disabled";
                 if (i === q.c) cls += " correct";
                 if (i === selectedAnswer && selectedAnswer !== q.c) cls += " wrong";
               }
+              if (quizAnswered && skippedQuestion) {
+                cls += " disabled";
+                if (i === q.c) cls += " correct";
+              }
               return (
-                <button key={i} className={cls} onClick={() => handleAnswer(i)}>
+                <button
+                  key={i}
+                  className={cls}
+                  onClick={() => handleAnswer(i)}
+                  disabled={isHidden || quizAnswered}
+                >
                   <span className="answer-letter">{LETTERS[i]}</span>
-                  <span>{opt}</span>
-                  {quizAnswered && i === q.c && <span className="answer-status">✓</span>}
-                  {quizAnswered && i === selectedAnswer && selectedAnswer !== q.c && (
+                  <span>{isHidden ? "—" : opt}</span>
+                  {quizAnswered && !skippedQuestion && i === q.c && <span className="answer-status">✓</span>}
+                  {quizAnswered && !skippedQuestion && i === selectedAnswer && selectedAnswer !== q.c && (
                     <span className="answer-status">✗</span>
                   )}
+                  {quizAnswered && skippedQuestion && i === q.c && <span className="answer-status">✓</span>}
                 </button>
               );
             })}
           </div>
 
           {quizAnswered && (
-            <div className={`explanation-box ${timedOut ? "timeout" : ""}`}>
-              {timedOut ? (
+            <div className={`explanation-box ${timedOut ? "timeout" : ""} ${skippedQuestion ? "skipped" : ""}`}>
+              {timedOut && (
                 <>⏰ <b>Naubos ang oras!</b> Sagot: <b>{q.o[q.c]}</b><br /></>
-              ) : null}
+              )}
+              {skippedQuestion && (
+                <>⏭️ <b>Skipped!</b> Sagot: <b>{q.o[q.c]}</b><br /></>
+              )}
               💡 {q.e}
             </div>
           )}
@@ -156,6 +255,11 @@ export default function QuizScreen() {
           )}
         </div>
       </div>
+
+      {/* Power-up flash */}
+      {powerupFlash && (
+        <div className="powerup-flash">{powerupFlash}</div>
+      )}
 
       {scorePopups.map((p) => (
         <div key={p.id} className="score-popup" style={{ left: `${p.left}%`, top: "55%" }}>

@@ -1,16 +1,21 @@
 import { useMemo } from "react";
 import useGameStore from "../store/gameStore";
 import { getRank, getNextRank, getXpProgress } from "../data/ranks";
+import { getDailyChallenge } from "../data/dailyChallenge";
 import { sounds } from "../utils/sound";
 
 const SUN_RAYS = [0, 45, 90, 135, 180, 225, 270, 315];
 
 export default function MenuScreen() {
-  const { totalXp, bestScores, soundEnabled, setScreen, toggleSound, resetAll } = useGameStore();
+  const {
+    totalXp, bestScores, soundEnabled, powerups, dailyStreak,
+    setScreen, toggleSound, resetAll, startQuiz, canPlayDaily,
+  } = useGameStore();
 
   const rank = useMemo(() => getRank(totalXp), [totalXp]);
   const nextRank = useMemo(() => getNextRank(totalXp), [totalXp]);
   const xpProg = useMemo(() => getXpProgress(totalXp), [totalXp]);
+  const dailyAvailable = canPlayDaily();
 
   const globalBest = useMemo(() => {
     const scores = Object.values(bestScores).map(Number);
@@ -20,6 +25,15 @@ export default function MenuScreen() {
   const play = (fn) => {
     if (soundEnabled) sounds.click();
     fn();
+  };
+
+  const handleDaily = () => {
+    if (soundEnabled) sounds.click();
+    if (!dailyAvailable) return;
+    const daily = getDailyChallenge();
+    // Tag questions with timePerQ for the quiz screen to read
+    const qs = daily.questions.map(q => ({ ...q, _timePerQ: daily.timePerQ }));
+    startQuiz("daily", qs, true);
   };
 
   return (
@@ -58,12 +72,31 @@ export default function MenuScreen() {
             <div className="xp-bar-label">{totalXp} XP total</div>
           </div>
 
+          {/* Power-ups display */}
+          <div className="powerups-display">
+            <div className="pu-item"><span>½</span> {powerups.fiftyFifty}</div>
+            <div className="pu-item"><span>⏭️</span> {powerups.skip}</div>
+            <div className="pu-item"><span>⏱️</span> {powerups.extraTime}</div>
+          </div>
+
           <div className="highscore-badge">
             Best: <span>{globalBest}</span> pts
           </div>
 
           <button className="btn-play" onClick={() => play(() => setScreen("map"))}>
             SIMULAN ANG QUEST!
+          </button>
+
+          {/* Daily Challenge */}
+          <button
+            className={`btn-daily ${!dailyAvailable ? "completed" : ""}`}
+            onClick={handleDaily}
+            disabled={!dailyAvailable}
+          >
+            {dailyAvailable
+              ? `📅 DAILY CHALLENGE${dailyStreak > 0 ? ` (${dailyStreak}🔥 streak)` : ""}`
+              : `✅ Daily Done! ${dailyStreak > 0 ? `(${dailyStreak}🔥 streak)` : "Come back tomorrow!"}`
+            }
           </button>
 
           <div className="settings-row">
@@ -73,11 +106,11 @@ export default function MenuScreen() {
             >
               Sound {soundEnabled ? "ON" : "OFF"}
             </button>
-            <button
-              className="toggle-btn"
-              onClick={() => play(() => setScreen("leaderboard"))}
-            >
+            <button className="toggle-btn" onClick={() => play(() => setScreen("leaderboard"))}>
               Leaderboard
+            </button>
+            <button className="toggle-btn" onClick={() => play(() => setScreen("achievements"))}>
+              🏅 Badges
             </button>
           </div>
 

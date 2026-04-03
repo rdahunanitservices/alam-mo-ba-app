@@ -6,6 +6,7 @@ import MapScreen from "./components/MapScreen";
 import QuizScreen from "./components/QuizScreen";
 import ResultsScreen from "./components/ResultsScreen";
 import LeaderboardScreen from "./components/LeaderboardScreen";
+import AchievementsScreen from "./components/AchievementsScreen";
 import "./styles/app.css";
 
 const SCREENS = {
@@ -14,12 +15,12 @@ const SCREENS = {
   quiz: QuizScreen,
   results: ResultsScreen,
   leaderboard: LeaderboardScreen,
+  achievements: AchievementsScreen,
 };
 
 export default function App() {
   const screen = useGameStore((s) => s.screen);
 
-  // Resume audio context on first interaction
   useEffect(() => {
     const handler = () => { resumeAudio(); };
     document.addEventListener("pointerdown", handler, { once: true });

@@ -227,6 +227,87 @@ const questions = {
       { q: "Ano ang Bodabil?", o: ["Filipino vaudeville shows", "Puppet theater", "Silent films", "Radio dramas"], c: 0, e: "Bodabil (Vaudeville) — Philippine variety entertainment 1900s-1960s." },
       { q: "Sino kumanta ng 'Dahil Sa'yo' na naging intl hit?", o: ["Pilita Corrales", "Nora Aunor", "Freddie Aguilar", "Basil Valdez"], c: 0, e: "Pilita Corrales — Asia's Queen of Songs." },
     ]
+  },
+
+  sports: {
+    easy: [
+      { q: "Sino ang Manny Pacquiao?", o: ["Basketball player", "World boxing champion", "Soccer player", "Swimmer"], c: 1, e: "Manny Pacquiao — 8-division world boxing champion mula General Santos City." },
+      { q: "Anong sport ang pinakasikat sa Pilipinas?", o: ["Soccer", "Basketball", "Baseball", "Tennis"], c: 1, e: "Basketball ang pinakasikat na sport sa Pilipinas — may court sa bawat barangay!" },
+      { q: "Ano ang PBA?", o: ["Philippine Baseball Association", "Philippine Basketball Association", "Philippine Boxing Association", "Philippine Badminton Association"], c: 1, e: "PBA — Philippine Basketball Association, oldest pro basketball league sa Asia." },
+      { q: "Sino ang 'Pac-Man'?", o: ["Video game character", "Manny Pacquiao", "Efren Reyes", "Carlos Yulo"], c: 1, e: "Manny Pacquiao — Pac-Man, ang pambansang kamao!" },
+      { q: "Anong sport ang Arnis?", o: ["Wrestling", "Martial arts gamit ang stick", "Boxing", "Karate"], c: 1, e: "Arnis — Filipino martial art gamit ang baston/stick, national sport ng PH." },
+      { q: "Sino ang 'The Magician' ng billiards?", o: ["Django Bustamante", "Efren 'Bata' Reyes", "Francisco Bustamante", "Dennis Orcollo"], c: 1, e: "Efren 'Bata' Reyes — The Magician, greatest pool player ever." },
+      { q: "Ilang division titles ang nanalo ni Pacquiao?", o: ["6", "8", "10", "12"], c: 1, e: "8-division world champion si Manny Pacquiao — world record!" },
+      { q: "Anong sport ang Gilas Pilipinas?", o: ["Volleyball", "Basketball", "Soccer", "Boxing"], c: 1, e: "Gilas Pilipinas — Philippine men's national basketball team." },
+      { q: "Saan laging ginaganap ang PBA games?", o: ["Rizal Memorial", "Philippine Arena", "Araneta Coliseum/Smart Araneta", "MOA Arena"], c: 2, e: "Smart Araneta Coliseum — 'The Big Dome', home ng PBA!" },
+      { q: "Anong Filipino sport ang gamit ang sipa (rattan ball)?", o: ["Sipa", "Arnis", "Piko", "Patintero"], c: 0, e: "Sipa — traditional Filipino sport na kinakatawan ng rattan ball." },
+      { q: "Sino ang 'Flash' ng Philippine track and field?", o: ["Lydia de Vega", "Elma Muros", "EJ Obiena", "Carlos Yulo"], c: 0, e: "Lydia de Vega — Asia's Fastest Woman noong 1980s." },
+      { q: "Anong water sport ang sikat sa Siargao?", o: ["Scuba diving", "Surfing", "Kayaking", "Water polo"], c: 1, e: "Siargao — Surfing Capital ng Pilipinas!" },
+      { q: "Ano ang UAAP?", o: ["University league sa sports", "Professional boxing org", "Government sports agency", "International sports body"], c: 0, e: "UAAP — University Athletic Association of the Philippines." },
+    ],
+    normal: [
+      { q: "Sino ang unang Pilipinong Olympic gold medalist?", o: ["Manny Pacquiao", "Hidilyn Diaz", "Carlos Yulo", "Lydia de Vega"], c: 1, e: "Hidilyn Diaz — first Filipino Olympic gold medalist sa weightlifting, Tokyo 2020." },
+      { q: "Anong sport ni Carlos Yulo?", o: ["Swimming", "Gymnastics", "Boxing", "Weightlifting"], c: 1, e: "Carlos Yulo — world champion gymnast, Olympic gold medalist sa Paris 2024!" },
+      { q: "Saang Olympics nanalo si Hidilyn Diaz ng gold?", o: ["Rio 2016", "Tokyo 2020", "Paris 2024", "London 2012"], c: 1, e: "Tokyo 2020 Olympics — Hidilyn Diaz, 55kg weightlifting gold!" },
+      { q: "Sino ang winningest PBA coach?", o: ["Tim Cone", "Yeng Guiao", "Chot Reyes", "Norman Black"], c: 0, e: "Tim Cone — winningest coach sa PBA history na may 20+ championships." },
+      { q: "Anong martial art ang pinakasikat na Filipino?", o: ["Taekwondo", "Arnis/Eskrima/Kali", "Jiu-jitsu", "Muay Thai"], c: 1, e: "Arnis, Eskrima, Kali — lahat ay pangalan ng Filipino martial art." },
+      { q: "Sino si EJ Obiena?", o: ["Boxer", "Pole vaulter", "Swimmer", "Runner"], c: 1, e: "EJ Obiena — Filipino pole vault champion, world-class athlete." },
+      { q: "Anong team ang may pinakamaraming PBA championships?", o: ["Ginebra", "San Miguel Beermen", "Talk N Text", "Alaska"], c: 1, e: "San Miguel Beermen — pinakamaraming championships sa PBA history." },
+      { q: "Sino ang 'Captain Hook' ng Philippine volleyball?", o: ["Alyssa Valdez", "Jaja Santiago", "Michele Gumabao", "Aby Marano"], c: 1, e: "Jaja Santiago — Captain Hook, nag-pro sa Japan V.League." },
+      { q: "Ilang Olympic gold medals ang nanalo ng Pilipinas sa Paris 2024?", o: ["1", "2", "3", "4"], c: 1, e: "2 gold medals sa Paris 2024 — Carlos Yulo (floor exercise at vault)!" },
+      { q: "Ano ang Azkals?", o: ["Basketball team", "Football/Soccer national team", "Volleyball team", "Cricket team"], c: 1, e: "Philippine Azkals — men's national football/soccer team." },
+    ],
+    hard: [
+      { q: "Sino ang first Filipino world boxing champion?", o: ["Manny Pacquiao", "Flash Elorde", "Pancho Villa", "Nonito Donaire"], c: 2, e: "Pancho Villa — first Filipino world boxing champion noong 1923." },
+      { q: "Anong taon nag-umpisa ang PBA?", o: ["1970", "1975", "1980", "1985"], c: 1, e: "PBA started in 1975 — oldest professional basketball league sa Asia." },
+      { q: "Sino ang 'Filipino Flash' sa boxing?", o: ["Manny Pacquiao", "Nonito Donaire", "Flash Elorde", "Gerry Penalosa"], c: 1, e: "Nonito Donaire — 'The Filipino Flash', multi-division world champion." },
+      { q: "Saang Olympic Games unang nanalo ang Pilipinas ng medal?", o: ["1928 Amsterdam", "1932 Los Angeles", "1936 Berlin", "1948 London"], c: 1, e: "1932 Los Angeles — bronze medal sa swimming ni Teofilo Yldefonso." },
+      { q: "Sino ang 'Speed Demon' ng Philippine athletics?", o: ["Lydia de Vega", "Elma Muros", "Eric Cray", "Merlin Gonzales"], c: 0, e: "Lydia de Vega — Asia's Fastest Woman, nag-dominate sa Asian Games." },
+      { q: "Anong taon na-recognize ang Arnis bilang national sport?", o: ["2009", "2010", "2013", "2015"], c: 0, e: "Republic Act 9850 (2009) — Arnis bilang national martial art at sport." },
+      { q: "Ilang Olympic medals ang Pilipinas bago 2020?", o: ["5", "8", "10", "12"], c: 2, e: "10 Olympic medals ang Pilipinas bago ang 2020 Tokyo Olympics (all silver/bronze)." },
+      { q: "Sino ang unang Pilipinong nag-compete sa Winter Olympics?", o: ["Michael Martinez", "Asa Miller", "Christopher Caluza", "Julian Macaraeg"], c: 0, e: "Michael Martinez — first Southeast Asian to compete in Winter Olympics figure skating (2014)." },
+      { q: "Ano ang Sepak Takraw?", o: ["Ball game gamit ang paa at rattan ball", "Racket sport", "Swimming event", "Track event"], c: 0, e: "Sepak Takraw — kick volleyball gamit ang rattan ball, popular sa Southeast Asia." },
+    ]
+  },
+
+  science: {
+    easy: [
+      { q: "Ano ang Philippine Eagle?", o: ["Pinakamalaking eagle sa mundo", "Pinakamaliit na eagle", "Isang uri ng parrot", "Isang uri ng hawk"], c: 0, e: "Philippine Eagle — isa sa pinakamalaki at pinakapowerful na eagle sa mundo." },
+      { q: "Ano ang tarsier?", o: ["Isda", "Maliit na primate", "Ibon", "Reptile"], c: 1, e: "Philippine Tarsier — isa sa pinakamaliit na primates sa mundo, nasa Bohol." },
+      { q: "Ano ang tamaraw?", o: ["Isang uri ng kalabaw na endemic sa Mindoro", "Uri ng usa", "Uri ng baboy-damo", "Uri ng baka"], c: 0, e: "Tamaraw — small buffalo endemic sa Mindoro, critically endangered." },
+      { q: "Saang probinsya sikat ang Taal Volcano?", o: ["Laguna", "Batangas", "Cavite", "Quezon"], c: 1, e: "Taal Volcano sa Batangas — volcano within a lake within a volcano!" },
+      { q: "Ano ang waling-waling?", o: ["Uri ng isda", "Uri ng orchid", "Uri ng puno", "Uri ng damo"], c: 1, e: "Waling-waling — Queen of Philippine Orchids, galing sa Mindanao." },
+      { q: "Ilan ang active volcanoes sa Pilipinas?", o: ["10", "24", "50", "100"], c: 1, e: "May 24 active volcanoes sa Pilipinas ayon sa PHIVOLCS." },
+      { q: "Ano ang carabao sa science?", o: ["Bubalus bubalis", "Bos taurus", "Equus caballus", "Canis lupus"], c: 0, e: "Bubalus bubalis — scientific name ng water buffalo/carabao." },
+      { q: "Bakit maraming bagyo sa Pilipinas?", o: ["Nasa Pacific Ring of Fire", "Nasa typhoon belt/tropical zone", "Malapit sa equator lang", "Dahil sa pollution"], c: 1, e: "Nasa typhoon belt ang Pilipinas — average 20 typhoons per year." },
+      { q: "Ano ang sampaguita sa science?", o: ["Jasminum sambac", "Rosa philippinensis", "Orchidaceae alba", "Gardenia jasminoides"], c: 0, e: "Jasminum sambac — scientific name ng sampaguita." },
+      { q: "Ano ang PAGASA?", o: ["Weather agency ng Pilipinas", "Space agency", "Science school", "Environmental group"], c: 0, e: "PAGASA — Philippine Atmospheric, Geophysical and Astronomical Services Administration." },
+      { q: "Ano ang narra?", o: ["Pambansang puno ng Pilipinas", "Pambansang bulaklak", "Pambansang ibon", "Pambansang isda"], c: 0, e: "Narra (Pterocarpus dalbergioides) — pambansang puno ng Pilipinas." },
+      { q: "Ano ang bangus sa English?", o: ["Tilapia", "Milkfish", "Catfish", "Tuna"], c: 1, e: "Bangus = Milkfish — pambansang isda ng Pilipinas." },
+    ],
+    normal: [
+      { q: "Ano ang PHIVOLCS?", o: ["Weather bureau", "Volcano and earthquake monitoring agency", "Space agency", "Marine biology institute"], c: 1, e: "PHIVOLCS — Philippine Institute of Volcanology and Seismology." },
+      { q: "Ano ang coral triangle at bakit kasama ang Pilipinas?", o: ["Area na may pinaka-diverse marine life", "Triangular island formation", "Weather pattern", "Mountain range"], c: 0, e: "Coral Triangle — center of marine biodiversity, kasama ang Pilipinas." },
+      { q: "Ano ang endemic species?", o: ["Hayop na galing ibang bansa", "Hayop na sa isang lugar lang matatagpuan", "Hayop na nasa lahat ng bansa", "Extinct na hayop"], c: 1, e: "Endemic — species na sa isang specific place lang matatagpuan, tulad ng Philippine Eagle." },
+      { q: "Ano ang DOST?", o: ["Department of Science and Technology", "Department of Social Tourism", "Division of School Teachers", "Department of Sustainable Transport"], c: 0, e: "DOST — Department of Science and Technology ng Pilipinas." },
+      { q: "Ilan ang estimated species ng plants sa Pilipinas?", o: ["1,000", "5,000", "13,500+", "50,000"], c: 2, e: "May 13,500+ plant species sa Pilipinas — isa sa most biodiverse countries." },
+      { q: "Ano ang Pinatubo eruption ng 1991?", o: ["Pinakamalaking eruption sa 20th century", "Pinakamaliit na eruption", "Underwater eruption", "Eruption sa Visayas"], c: 0, e: "Mt. Pinatubo eruption (1991) — second-largest volcanic eruption of the 20th century." },
+      { q: "Ano ang dugong?", o: ["Uri ng dolphin", "Sea cow na nasa Pilipinas", "Uri ng whale", "Uri ng sea turtle"], c: 1, e: "Dugong — sea cow, marine mammal na matatagpuan sa Philippine waters." },
+      { q: "Ano ang rafflesia sa Pilipinas?", o: ["Pinakamalaking bulaklak", "Uri ng orchid", "Carnivorous plant", "Aquatic plant"], c: 0, e: "Rafflesia — pinakamalaking bulaklak sa mundo, may species sa Pilipinas." },
+      { q: "Bakit important ang mangroves?", o: ["Coastal protection at marine nursery", "Source ng lumber", "Para sa turismo lang", "Wala, pwede tanggalin"], c: 0, e: "Mangroves — proteksyon sa coastal areas at nursery ng marine species." },
+      { q: "Ano ang Philippine Fault Zone?", o: ["Major fault line na tumatakbo sa buong Pilipinas", "Underwater cave", "Volcanic chain", "River system"], c: 0, e: "Philippine Fault Zone — 1,200 km fault line mula Luzon hanggang Mindanao." },
+    ],
+    hard: [
+      { q: "Sino ang Filipino scientist na nag-imbento ng incubator para sa rural areas?", o: ["Fe del Mundo", "Gregorio Zara", "Eduardo Quisumbing", "Angel Alcala"], c: 0, e: "Dr. Fe del Mundo — nag-imbento ng bamboo incubator para sa rural areas." },
+      { q: "Ano ang biodiversity hotspot at bakit kasama ang Pilipinas?", o: ["Area na may high species diversity pero threatened", "Protected national park", "Zoo", "Research center"], c: 0, e: "Pilipinas ay isa sa 36 biodiversity hotspots — high endemism pero threatened." },
+      { q: "Sino ang Father of Philippine Botany?", o: ["Eduardo Quisumbing", "Angel Alcala", "Gregorio Zara", "Fe del Mundo"], c: 0, e: "Eduardo Quisumbing — Father of Philippine Botany, expert sa orchids." },
+      { q: "Ano ang contribution ni Angel Alcala sa science?", o: ["Invented incubator", "Pioneer ng marine conservation at artificial reefs", "Discovered new volcano", "Created weather satellite"], c: 1, e: "Dr. Angel Alcala — pioneer sa marine conservation at artificial coral reef technology." },
+      { q: "Ano ang Tubbataha Reefs sa biodiversity?", o: ["UNESCO site na may 600+ fish species", "Man-made reef", "Freshwater lake", "Mountain ecosystem"], c: 0, e: "Tubbataha Reefs — UNESCO World Heritage, may 600+ fish species at 360+ coral species." },
+      { q: "Sino ang nag-imbento ng two-way video telephone?", o: ["Fe del Mundo", "Gregorio Zara", "Roberto del Rosario", "Agapito Flores"], c: 1, e: "Gregorio Zara — Filipino engineer na nag-imbento ng video telephone noong 1955." },
+      { q: "Ano ang Philippine mouse deer?", o: ["Smallest hoofed mammal sa mundo", "Large forest deer", "Domesticated deer", "Extinct animal"], c: 0, e: "Philippine mouse deer (Balabac chevrotain) — isa sa pinakamaliit na hoofed mammals." },
+      { q: "Ilang species ng marine turtles ang nasa Pilipinas?", o: ["2", "3", "5", "7"], c: 2, e: "5 species ng marine turtles ang matatagpuan sa Philippine waters." },
+      { q: "Ano ang Benham Rise (Philippine Rise)?", o: ["Underwater plateau na may rich biodiversity", "Mountain range", "Desert island", "River delta"], c: 0, e: "Philippine Rise — underwater plateau sa Pacific na may rich marine biodiversity." },
+    ]
   }
 };
 

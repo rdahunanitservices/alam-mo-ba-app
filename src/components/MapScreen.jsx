@@ -88,7 +88,7 @@ export default function MapScreen() {
       <div className="header-bar map-header">
         <div>
           <div className="map-title">Philippines Quest</div>
-          <div className="map-subtitle">{done} / 20 levels done</div>
+          <div className="map-subtitle">{done} / {levels.length} levels done</div>
         </div>
         <div className="map-xp-pill">
           <div className="rank-label">{rank.icon} {rank.name}</div>
@@ -98,7 +98,7 @@ export default function MapScreen() {
 
       <div className="map-container">
         <div className="map-scroll" ref={scrollRef}>
-          <div style={{ position: "relative", width: "100%", minHeight: 1500 }}>
+          <div style={{ position: "relative", width: "100%", minHeight: 2000 }}>
             {/* Region banners */}
             {REGION_BANNERS.map((b) => (
               <div key={b.label} className="region-banner" style={{ top: `${b.y}%` }}>
