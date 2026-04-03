@@ -3,6 +3,7 @@ import { persist } from "zustand/middleware";
 import { getRank, getNextRank, DEFAULT_LEADERBOARD } from "../data/ranks";
 import { checkAchievements } from "../data/achievements";
 import { getTodayDateStr } from "../data/dailyChallenge";
+import { saveProgressToCloud, loadProgressFromCloud, submitScore } from "../firebase/service";
 import levels from "../data/levels";
 
 const useGameStore = create(
@@ -45,10 +46,62 @@ const useGameStore = create(
       isDaily: false, // true if playing daily challenge
       quizPowerupsUsed: { fiftyFifty: 0, skip: 0, extraTime: 0 },
 
+      // === Firebase User (not persisted in localStorage) ===
+      user: null,
+      isOnline: false,
+      isSyncing: false,
+      onlineLeaderboard: [],
+
       // === Actions ===
       setScreen: (screen) => set({ screen }),
       toggleSound: () => set((s) => ({ soundEnabled: !s.soundEnabled })),
       clearNewAchievements: () => set({ newAchievements: [] }),
+
+      setUser: (user) => set({
+        user: user ? { uid: user.uid, displayName: user.displayName, photoURL: user.photoURL, email: user.email } : null,
+        isOnline: !!user,
+      }),
+
+      syncToCloud: async () => {
+        const s = get();
+        if (!s.user) return false;
+        set({ isSyncing: true });
+        try {
+          await saveProgressToCloud(s.user.uid, {
+            totalXp: s.totalXp, levelProgress: s.levelProgress, bestScores: s.bestScores,
+            powerups: s.powerups, unlockedAchievements: s.unlockedAchievements,
+            bestStreak: s.bestStreak, dailyCompleted: s.dailyCompleted, dailyStreak: s.dailyStreak,
+          });
+          const rank = getRank(s.totalXp);
+          await submitScore(s.user.uid, s.user.displayName, s.user.photoURL, s.totalXp, rank.name);
+          set({ isSyncing: false });
+          return true;
+        } catch (e) { set({ isSyncing: false }); return false; }
+      },
+
+      syncFromCloud: async () => {
+        const s = get();
+        if (!s.user) return false;
+        set({ isSyncing: true });
+        try {
+          const cloud = await loadProgressFromCloud(s.user.uid);
+          if (cloud && (cloud.totalXp || 0) > s.totalXp) {
+            set({
+              totalXp: cloud.totalXp || 0, levelProgress: cloud.levelProgress || s.levelProgress,
+              bestScores: cloud.bestScores || s.bestScores, powerups: cloud.powerups || s.powerups,
+              unlockedAchievements: cloud.unlockedAchievements || s.unlockedAchievements,
+              bestStreak: cloud.bestStreak || s.bestStreak, dailyCompleted: cloud.dailyCompleted || s.dailyCompleted,
+              dailyStreak: cloud.dailyStreak || s.dailyStreak,
+            });
+          } else {
+            await get().syncToCloud();
+          }
+          set({ isSyncing: false });
+          return true;
+        } catch (e) { set({ isSyncing: false }); return false; }
+      },
+
+      setOnlineLeaderboard: (lb) => set({ onlineLeaderboard: lb }),
 
       getUnlockedUpTo: () => {
         const { levelProgress } = get();
@@ -235,6 +288,9 @@ const useGameStore = create(
         }
 
         set(updates);
+
+        // Auto-sync to cloud if logged in
+        setTimeout(() => { get().syncToCloud(); }, 500);
 
         const nextLv = !isDaily ? levels.find((l) => l.id === s.currentLevelId + 1) : null;
         const justUnlocked = nextLv && stars > 0 && !(s.levelProgress[nextLv.id]?.stars > 0);

@@ -255,9 +255,17 @@ body::before {
 .popup-locked-msg { text-align: center; padding: 12px; background: var(--wrong-bg); border-radius: 12px; font-size: 13px; color: var(--wrong); font-weight: 700; }
 
 /* ===== QUIZ ===== */
-.quiz-header { padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; }
-.quiz-cat-label { font-size: 12px; color: rgba(255,255,255,.85); font-weight: 700; max-width: 60%; }
-.quiz-score-pill { font-family: 'Fredoka One', cursive; font-size: 16px; color: var(--gold); background: rgba(0,0,0,.2); padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(252,209,22,.3); }
+.quiz-header { padding: 10px 16px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.quiz-back-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: none;
+  background: rgba(255,255,255,.15); color: #fff; font-size: 16px; font-weight: 800;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all 0.15s; flex-shrink: 0;
+}
+.quiz-back-btn:hover { background: rgba(255,255,255,.25); }
+.quiz-back-btn:active { transform: scale(0.9); }
+.quiz-cat-label { font-size: 12px; color: rgba(255,255,255,.85); font-weight: 700; flex: 1; text-align: center; }
+.quiz-score-pill { font-family: 'Fredoka One', cursive; font-size: 16px; color: var(--gold); background: rgba(0,0,0,.2); padding: 5px 14px; border-radius: 20px; border: 1px solid rgba(252,209,22,.3); flex-shrink: 0; }
 .q-progress-bar { height: 3px; background: rgba(255,255,255,.1); flex-shrink: 0; }
 .q-progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); transition: width 0.4s; border-radius: 0 2px 2px 0; }
 .timer-track { height: 5px; background: #eee; flex-shrink: 0; }
@@ -285,13 +293,13 @@ body::before {
 .q-timer-num.warning { color: var(--red); }
 .q-text { font-family: 'Fredoka One', cursive; font-size: 19px; color: var(--text-dark); line-height: 1.45; margin-bottom: 14px; }
 
-.answers { display: flex; flex-direction: column; gap: 8px; }
+.answers { display: flex; flex-direction: column; gap: 8px; width: 100%; }
 .answer-btn {
   width: 100%; padding: 12px 16px; border-radius: 14px; border: 2px solid #e8e4d8;
-  background: #fff; font-family: 'Nunito', sans-serif; font-size: 13px; font-weight: 700;
+  background: #fff; font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 700;
   color: var(--text-dark); cursor: pointer; text-align: left; transition: all 0.18s;
   position: relative; display: flex; align-items: center; gap: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,.04);
+  box-shadow: 0 2px 4px rgba(0,0,0,.04); min-height: 48px;
 }
 .answer-letter {
   width: 26px; height: 26px; border-radius: 8px; background: rgba(0,56,168,.08);
@@ -416,13 +424,13 @@ body::before {
 
 /* ===== POWER-UPS ===== */
 .powerup-bar {
-  display: flex; gap: 8px; justify-content: center; margin-bottom: 12px;
+  display: flex; gap: 8px; justify-content: center; margin-bottom: 12px; width: 100%;
 }
 .powerup-btn {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
-  padding: 6px 14px; border-radius: 12px; border: 2px solid rgba(0,56,168,.15);
+  padding: 8px 16px; border-radius: 12px; border: 2px solid rgba(0,56,168,.15);
   background: linear-gradient(135deg, #fff, #f0f4ff); cursor: pointer;
-  transition: all 0.2s; position: relative;
+  transition: all 0.2s; position: relative; flex: 1;
 }
 .powerup-btn:hover:not(:disabled) {
   border-color: var(--blue); transform: translateY(-2px);
@@ -546,3 +554,59 @@ body::before {
 .ach-toast-icon { font-size: 24px; }
 .ach-toast-name { font-family: 'Fredoka One', cursive; font-size: 13px; color: var(--text-dark); }
 .ach-toast-desc { font-size: 11px; color: var(--text-mid); }
+
+/* ===== GOOGLE SIGN-IN & USER CARD ===== */
+.btn-google {
+  width: 100%; padding: 12px 16px; border-radius: 50px;
+  border: 2px solid #e5e7eb; background: #fff;
+  font-family: 'Nunito', sans-serif; font-size: 14px; font-weight: 800;
+  color: var(--text-dark); cursor: pointer; transition: all 0.15s;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn-google:hover { border-color: #4285F4; box-shadow: 0 2px 12px rgba(66,133,244,.2); }
+.btn-google:active { transform: translateY(1px); }
+.btn-google svg { flex-shrink: 0; }
+
+.user-card {
+  width: 100%; display: flex; align-items: center; gap: 10px;
+  padding: 10px 14px; border-radius: 16px;
+  background: linear-gradient(135deg, #eff6ff, #dbeafe);
+  border: 1.5px solid rgba(0,56,168,.15);
+}
+.user-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  border: 2px solid var(--blue); flex-shrink: 0; object-fit: cover;
+}
+.user-info { flex: 1; min-width: 0; }
+.user-name {
+  font-weight: 800; font-size: 13px; color: var(--text-dark);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.user-status { font-size: 10px; color: var(--green); font-weight: 700; }
+.sign-out-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  border: none; background: rgba(0,0,0,.06); color: var(--text-mid);
+  font-size: 14px; cursor: pointer; display: flex; align-items: center;
+  justify-content: center; flex-shrink: 0; transition: all 0.15s;
+}
+.sign-out-btn:hover { background: rgba(0,0,0,.12); }
+
+/* ===== LEADERBOARD TABS ===== */
+.lb-tabs {
+  display: flex; flex-shrink: 0; border-bottom: 1px solid #f0ebe0;
+}
+.lb-tab {
+  flex: 1; padding: 10px; text-align: center; font-size: 13px; font-weight: 800;
+  color: var(--text-mid); background: none; border: none; cursor: pointer;
+  transition: all 0.15s; border-bottom: 3px solid transparent;
+}
+.lb-tab.active {
+  color: var(--blue); border-bottom-color: var(--blue);
+  background: rgba(0,56,168,.03);
+}
+.lb-tab:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.lb-avatar {
+  width: 32px; height: 32px; border-radius: 50%;
+  border: 1.5px solid #e5e7eb; flex-shrink: 0; object-fit: cover;
+}

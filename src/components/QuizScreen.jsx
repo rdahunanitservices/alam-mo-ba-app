@@ -156,6 +156,14 @@ export default function QuizScreen() {
     }
   };
 
+  const handleBack = () => {
+    if (soundEnabled) sounds.click();
+    if (confirm("Sigurado ka bang aalis? Mawawala ang progress mo sa level na ito.")) {
+      stop();
+      store.setScreen(isDaily ? "menu" : "map");
+    }
+  };
+
   if (!q) return null;
 
   const selectedAnswer = store.selectedAnswer;
@@ -168,6 +176,7 @@ export default function QuizScreen() {
   return (
     <>
       <div className="header-bar quiz-header">
+        <button className="quiz-back-btn" onClick={handleBack}>✕</button>
         <div className="quiz-cat-label">{headerLabel}</div>
         <div className="quiz-score-pill">★ {quizScore}</div>
       </div>

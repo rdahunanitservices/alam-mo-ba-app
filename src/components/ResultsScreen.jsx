@@ -4,7 +4,8 @@ import levels, { TOPIC_NAMES } from "../data/levels";
 import questionsData from "../data/questions";
 import { getRank } from "../data/ranks";
 import { sounds } from "../utils/sound";
-import { shareScore, shuffle } from "../utils/helpers";
+import { shuffle } from "../utils/helpers";
+import { generateShareData, shareResults } from "../firebase/service";
 
 function UnlockOverlay({ level, onClose }) {
   const topicName = TOPIC_NAMES[level.topic] || level.topic;
@@ -100,7 +101,8 @@ export default function ResultsScreen() {
   const handleShare = () => {
     if (soundEnabled) sounds.click();
     const label = isDaily ? "Daily Challenge" : `Level ${lv?.id} (${lv?.name})`;
-    shareScore(currentLevelId, label, quizScore, rank, totalXp);
+    const shareData = generateShareData(quizScore, label, rank, totalXp, isDaily);
+    shareResults(shareData);
   };
 
   const handleNav = (screen) => {
