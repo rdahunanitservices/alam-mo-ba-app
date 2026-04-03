@@ -52,10 +52,8 @@ export default function ResultsScreen() {
   const handleReplay = () => {
     if (soundEnabled) sounds.click();
     const bank = questionsData[lv.topic];
-    let pool = [];
-    if (lv.diff === "easy") pool = [...(bank.easy || [])];
-    else if (lv.diff === "normal") pool = [...(bank.normal || []), ...(bank.easy || []).slice(0, 3)];
-    else pool = [...(bank.hard || []), ...(bank.normal || []).slice(0, 3)];
+    // STRICT: Only pull from the exact difficulty level
+    const pool = [...(bank[lv.diff] || [])];
     const qs = shuffle(pool).slice(0, 10);
     startQuiz(lv.id, qs);
   };

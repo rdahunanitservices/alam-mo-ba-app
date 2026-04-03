@@ -75,10 +75,8 @@ export default function MapScreen() {
 
     const bank = questions[lv.topic];
     if (!bank) return;
-    let pool = [];
-    if (lv.diff === "easy") pool = [...(bank.easy || [])];
-    else if (lv.diff === "normal") pool = [...(bank.normal || []), ...(bank.easy || []).slice(0, 3)];
-    else pool = [...(bank.hard || []), ...(bank.normal || []).slice(0, 3)];
+    // STRICT: Only pull from the exact difficulty level — no mixing!
+    const pool = [...(bank[lv.diff] || [])];
 
     const qs = shuffle(pool).slice(0, 10);
     if (!qs.length) return alert("No questions available!");
